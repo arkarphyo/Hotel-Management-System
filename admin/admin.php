@@ -26,12 +26,28 @@ if($usermail == true){
     <script src="../dist/pace-js/pace.min.js"></script>
     <link rel="stylesheet" href="../css/flash.css">
     <!-- fontowesome -->
-    <link rel="stylesheet" href="../assets/font-awesome/css/all.min.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/all.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/brands.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/duotone.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-solid.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-regular.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-light.css"/>
     <script src="../assets/font-awesome/js/pro.min.js"></script>
     <title>Mount Royal - Admin Dashboard</title>
 </head>
 
 <body>
+
+
+    <!-- Loading screen -->
+    <div id="loading">
+         <svg class="spinner" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#4CAF50" stroke-width="5" stroke-linecap="round"/>
+        </svg>  
+        <h3 class="gradient-text">ခဏစောင့်ပေးပါ...</h3>
+
+    </div>
+
     <!-- mobile view -->
     <div id="mobileview">
         <sapn>Admin Panel ကို Mobile ဖုန်းဖြင့် အသုံးမပြုနိုင်ပါ။</span>
@@ -41,7 +57,7 @@ if($usermail == true){
     <!-- nav bar -->
     <nav class="uppernav">
         <div class="logo">
-            <img class="bluebirdlogo" src="../image/mrlogo.png" alt="logo">
+            <img class="bluebirdlogo" src="../image/mrlogo.png" width="100" height="100" alt="logo">
             <p>Mount Royal</p>
         </div>
         <div class="logout">
@@ -66,6 +82,7 @@ if($usermail == true){
     </nav>
 
     <!-- main section -->
+     
     <div class="mainscreen">
         <iframe class="frames frame1 active" src="./dashboard.php" frameborder="0"></iframe>
         <iframe class="frames frame2" src="./roombook.php" frameborder="0"></iframe>
@@ -77,5 +94,13 @@ if($usermail == true){
 </body>
 
 <script src="./javascript/script.js"></script>
+
+<!-- JS to hide loading screen when page is ready -->
+<script>
+  window.addEventListener('load', function () {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("mainscreen").style.display = "block";
+  });
+</script>
 
 </html>

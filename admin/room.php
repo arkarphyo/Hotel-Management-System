@@ -13,13 +13,13 @@ include '../config.php';
     <title>BlueBird - Admin</title>
     <!-- fontowesome -->
     <link rel="stylesheet" href="../assets/font-awesome/css/all.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/css/brands.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/css/duotone.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-solid.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-regular.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/css/sharp-light.css"/>
+    <!-- <link rel="stylesheet" href="../assets/font-awesome/css/brands.css"/> -->
+    <!-- <link rel="stylesheet" href="../assets/font-awesome/css/duotone.css"/> -->
+    <!-- <link rel="stylesheet" href="../assets/font-awesome/css/sharp-solid.css"/> -->
+    <!-- <link rel="stylesheet" href="../assets/font-awesome/css/sharp-regular.css"/> -->
+    <!-- <link rel="stylesheet" href="../assets/font-awesome/css/sharp-light.css"/> -->
     <script src="../assets/font-awesome/js/pro.min.js"></script>
-     <link
+     <!-- <link
         rel="stylesheet"
         href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css"
       >
@@ -45,7 +45,7 @@ include '../config.php';
       <link
         rel="stylesheet"
         href="https://site-assets.fontawesome.com/releases/v6.7.2/css/brands.css"
-      />
+      /> -->
     <!-- boot -->
     <link href="../dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="../dist/bootstrap/js/bootstrap.bundle.min.js"></script>

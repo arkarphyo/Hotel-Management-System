@@ -15,10 +15,71 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+/* Loading overlay style */
+#loading {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+}
+
+/* SVG spinner animation */
+
+    .spinner {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #2b4b68,
+        #6aa9dc,
+        #a2c9ed,
+        #2b4b68
+      );
+      mask: radial-gradient(farthest-side, transparent calc(100% - 10px), black 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), black 100%);
+      animation: spin 1.2s linear infinite;
+    }
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+.gradient-text {
+      font-size: 40px;
+      font-weight: bold;
+      background: linear-gradient(
+        90deg,
+        #2b4b68,
+        #6aa9dc,
+        #a2c9ed,
+        #6aa9dc,
+        #2b4b68
+      );
+      background-size: 200% auto;
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      animation: slideGradient 3s linear infinite;
+    }
+
+    @keyframes slideGradient {
+      0% {
+        background-position: 200% center;
+      }
+      100% {
+        background-position: 0% center;
+      }
+    }
 .uppernav{
     height: 50px;
     /* background-color: rgb(78, 94, 112); */
-    background-image: linear-gradient(90deg, #70b7e6bc, #0000ffaa);
+    background-image: linear-gradient(90deg, #ffffffbc, #040494e0);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -35,8 +96,8 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
-    font-size: 30px;
-    color: rgb(8, 17, 44);
+    font-size: 18 px;
+    color: rgb(97, 86, 35);
     text-shadow: var(--bg-text-shadow);
 }
 
