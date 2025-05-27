@@ -101,11 +101,11 @@ if($stat == "NotConfirm")
         header("Location:roombook.php");
     }
 }
-// else
-// {
-//     echo "<script>alert('Guest Already Confirmed')</script>";
-//     header("Location:roombook.php");
-// }
+else
+{
+    echo "<script>alert('Guest Already Confirmed')</script>";
+    header("Location:roombook.php");
+}
 
 
 ?>

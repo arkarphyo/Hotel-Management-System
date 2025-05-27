@@ -1,0 +1,32 @@
+/* Basic styling for the calendar */
+.datepicker-calendar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-family: sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 9999;
+}
+.datepicker-calendar table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.datepicker-calendar th,
+.datepicker-calendar td {
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+.datepicker-calendar th {
+  background: #f0f0f0;
+}
+.datepicker-calendar td:hover {
+  background: #eee;
+}
+.datepicker-calendar .selected {
+  background: #007bff;
+  color: white;
+}

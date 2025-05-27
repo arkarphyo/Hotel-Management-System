@@ -54,6 +54,10 @@ include '../config.php';
 
 <body>
     <div class="addroomsection">
+                
+        <button class="adduser" id="adduser" onclick="openmodel(setroomtypemodel)"><i class="fa-solid fa-house-window"></i> Set Type </button>
+        <button class="adduser" id="adduser" onclick="openmodel(setroomnumbermodel)"><i class="fa-solid fa-input-numeric"></i> Set Number </button>
+        <button class="adduser" id="adduser" onclick="openmodel(setpricemodel)"><i class="fa-solid fa-money-check-dollar"></i> Set Price </button>
         <form action="" method="POST">
             
             <label for="nroom">Room No :</label>

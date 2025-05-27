@@ -24,6 +24,8 @@ if($usermail == true){
     <link rel="stylesheet" href="./css/admin.css">
     <!-- loading bar -->
     <script src="../dist/pace-js/pace.min.js"></script>
+    
+    <link rel="stylesheet" href="../admin/widget/css/datepicker.css">   
     <link rel="stylesheet" href="../css/flash.css">
     <!-- fontowesome -->
     <link rel="stylesheet" href="../assets/font-awesome/css/all.css"/>
@@ -94,6 +96,7 @@ if($usermail == true){
 </body>
 
 <script src="./javascript/script.js"></script>
+<script src="../admin/widget/js/datepicker.js"></script>
 
 <!-- JS to hide loading screen when page is ready -->
 <script>
@@ -102,5 +105,6 @@ if($usermail == true){
     document.getElementById("mainscreen").style.display = "block";
   });
 </script>
+
 
 </html>

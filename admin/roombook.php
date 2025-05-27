@@ -31,10 +31,6 @@ include '../config.php';
     <!-- ================================================= -->
     <div class="searchsection d-flex justify-content-between  px-3 py-2">
         <input type="text" name="search_bar" id="search_bar" placeholder="search..." onkeyup="searchFun()">
-        
-        <button class="adduser" id="adduser" onclick="openmodel(setroomtypemodel)"><i class="fa-solid fa-house-window"></i> Set Type </button>
-        <button class="adduser" id="adduser" onclick="openmodel(setroomnumbermodel)"><i class="fa-solid fa-input-numeric"></i> Set Number </button>
-        <button class="adduser" id="adduser" onclick="openmodel(setpricemodel)"><i class="fa-solid fa-money-check-dollar"></i> Set Price </button>
         <button class="adduser" id="adduser" onclick="openmodel(setbookingmodel)"><i class="fa-solid fa-tickets-perforated"></i> Set Booking </button>
         <form action="./exportdata.php" method="post">
             <button class="excel-btn" id="excel-btn" name="exportexcel" type="submit"><i class="fa-solid fa-file-excel white-icon">  </i>Export Excel</button>
@@ -51,7 +47,7 @@ include '../config.php';
             <thead>
                 <tr class="text-center align-middle">
                     <th scope="col" >NO</th>
-                    <th scope="col">အမည်အမည်</th>
+                    <th scope="col">အမည်</th>
                     <th scope="col">နိုင်ငံသား</th>
                     <th scope="col">ဖုန်းနံပါတ်</th>
                     <th scope="col">အခန်းမျိုးအစား</th>
@@ -60,8 +56,7 @@ include '../config.php';
                     <th scope="col">Check-In</th>
                     <th scope="col">Check-Out</th>
                     <th scope="col">နေထိုင်မည့် ရက်အရေအတွက် </th>
-                    <th scope="col">Status</th>
-                    <th scope="col" colspan ="2" class="action">Action</th>
+                    <th scope="col" colspan ="3" class="action">Action</th>
                     <!-- <th>Delete</th> -->
                 </tr>
             </thead>
@@ -81,25 +76,24 @@ include '../config.php';
                     <td><?php echo $res['cin'] ?></td>
                     <td><?php echo $res['cout'] ?></td>
                     <td><?php echo $res['nodays'] ?></td>
-                    <td><?php echo $res['stat'] ?></td>
-                    
-                    <td class="action">
-                        <?php
-                            if($res['stat'] == "Confirm")
+                    <td><?php 
+                            if($res['stat'] == "1")
                             {
-                                echo " ";
+                                $res['stat'] = "Confirmed";
+                                echo $res['stat'];
                             }
                             else
                             {
-                                echo "<a href='roomconfirm.php?id=". $res['id'] ."'><button class='btn btn-success'>Confirm</button></a>";
+                               echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button></a>";
                             }
-                        ?>
+                        ?></td>
+                    
+                    <td class="action">
                         <a href="roombookedit.php?id=<?php echo $res['id'] ?>"><button class="btn btn-primary">Edit</button></a>
                     </td>
                     <td class="action" >
-                        
                         <a href="roombookdelete.php?id=<?php echo $res['id'] ?>"><button class='btn btn-danger'>Delete</button></a>
-                        </td>
+                    </td>
             </tr>
             <?php
             }
@@ -110,6 +104,7 @@ include '../config.php';
     </div>
 </body>
 <script src="./javascript/roombook.js"></script>
+<script src="actions/js/actions.js"></script>
 
 
 
