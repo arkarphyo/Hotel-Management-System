@@ -36,7 +36,23 @@ function confirmBookingBtn(bookingId){
     });
 }
 
-function setBookingBtn(Name, National, Phone, RoomType, RoomNos, Bed, NoofRoom, Meal, cin, cout) {
+function setBookingBtn() {
+    const Name = document.getElementById('nameInput').value;
+    const National = document.getElementById('nationalInput').value;
+    const Phone = document.getElementById('phoneInput').value;
+    //const roomTypeValue = document.getElementById('roomTypeSelect').value;
+    const RoomType = "Romm Type";
+    //const roomNosValue = document.getElementById('roomNosInput').value;
+    const RoomNosArray = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+    // Convert RoomNos array to JSON string
+    const RoomNos = JSON.stringify(RoomNosArray);
+    //const bedValue = document.getElementById('bedTypeSelect').value;
+    const Bed = "Bed Type";
+    const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
+    const Meal = document.getElementById('mealInput').value;
+    const cin = document.getElementById('cinInput').value;
+    const cout = document.getElementById('coutInput').value;
+    alert(`${Name}, ${National}, ${Phone}, ${RoomType}, ${RoomNos}, ${Bed}, ${NoofRoom}, ${Meal}, ${cin}, ${cout}`);
     // Check for required fields before sending request
     if (!Name || !National || !Phone || !RoomType || !RoomNos || !Bed || !NoofRoom || !Meal || !cin || !cout) {
         // Find which fields are missing
@@ -82,9 +98,11 @@ function setBookingBtn(Name, National, Phone, RoomType, RoomNos, Bed, NoofRoom, 
     .then(data => {
         // Optionally handle response data here
         console.log('Booking model data:', data);
+        document.getElementById('setbookingmodel').style.display = 'none';
+        location.reload();
     })
     .catch(error => {
         console.error('Fetching Set Booking Error:', error);
-        alert('Failed to fetch booking model.');
+        alert('Failed to fetch booking model data.', cin);
     });
 }

@@ -5,7 +5,7 @@
     #setbookingmodel{
         position : fixed;
         z-index: 1000;
-        height: 100%;
+        height: 70vh;
         width: 100%;
         display: none;
         /* display: flex; */
@@ -15,9 +15,9 @@
     }
 
     #setbookingmodel .setbookingform{
-        height: 90vh;
-        min-height: 400px;
-        max-height: 98vh;
+        height: 70vh;
+        min-height: 300px;
+        max-height: 70vh;
         box-sizing: border-box;
         width: 80%;
         background-color: #ccdff4;
@@ -25,6 +25,7 @@
         /* temp */
         position: relative;
         top: 20px;
+        bottom: 20px;
         animation: modelinfoform .3s ease;
     }
 
@@ -51,7 +52,6 @@
 
     .setbookingform .middle{
         width: 100%;
-        height: 500px;
         margin: 10px 0 0 0;
         display: flex;
     }
@@ -91,22 +91,51 @@
 </style>
 
     <div id="setbookingmodel">
-        <form action="" method="POST" class="setbookingform glass-blur">
-            <div class="head">
-                <h3>BOOKING</h3>
-                <i class="fa-solid fa-circle-xmark" onclick="closemodel(setbookingmodel)"></i>
+        <form action="" method="POST" class="setbookingform glass-blur macbook-popup" style="height: 75vh; min-height: 250px; max-height:85vh; animation: macbookPopup 0.4s cubic-bezier(.4,0,.2,1); box-shadow: 0 16px 48px rgba(0,0,0,0.22); border-radius: 18px 18px 18px 18px/18px 18px 18px 18px;">
+            <div class="head" style="height: 32px; padding: 0 12px; border-radius: 18px 18px 0 0; background: linear-gradient(90deg, #e3e6ea 0%, #cfd8e3 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: center;">
+                <h3 style="font-size: 1.1rem; margin: 0 auto; position: static; flex: 1; text-align: center; color: #222d3b;">BOOKING</h3>
+                <i class="fa-solid fa-circle-xmark" style="font-size: 20px; transition: transform 0.18s cubic-bezier(.4,0,.2,1), color 0.18s; color: #6b7280;" 
+                   onmouseover="this.style.transform='scale(1.18) rotate(8deg)'; this.style.color='#e74c3c';" 
+                   onmouseout="this.style.transform='scale(1) rotate(0deg)'; this.style.color='#6b7280';" 
+                   onclick="closemodel(setbookingmodel)">
+                </i>
             </div>
-            <div class="middle">
+            <div class="middle" style="height: 70vh; max-height: 70vh;">
                 <?php include(__DIR__ . '/model-panel/info-booking-model.php'); ?>
 
                 <div class="line"></div>
                 
                 <?php include(__DIR__ . '/model-panel/reservationinfo-booking-model.php'); ?>
             </div>
-            <?php include(__DIR__ . '/model-panel/footer-booking-model.php'); ?>
+            <div class="footer" style="position: absolute; bottom: 0; left: 0; width: 100%;">
+                <?php include(__DIR__ . '/model-panel/footer-booking-model.php'); ?>
+            </div>
         </form>
     </div>
-    <script src="actions/js/actions.js"></script>
+    <style>
+    @keyframes macbookPopup {
+        0% {
+            opacity: 0;
+            transform: scale(0.95) translateY(40px);
+            box-shadow: 0 0 0 rgba(0,0,0,0);
+        }
+        60% {
+            opacity: 1;
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+    }
+    .macbook-popup {
+        animation: macbookPopup 0.4s cubic-bezier(.4,0,.2,1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        transition: box-shadow 0.2s;
+    }
+    </style>
     <!-- setbookingmodel end -->
     <script src="actions/js/actions.js"></script>
     <script>

@@ -1,5 +1,5 @@
  <div class="reservationinfo">
-                    <h4>Reservation information</h4>
+                    <h4 style="font-size: 16px;">Reservation information</h4>
                     <!-- Grid of selectable room icons (multi-selectable) -->
                     <div class="room-grid">
                         <?php
@@ -244,7 +244,9 @@
                         const checked = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
                         const countDiv = document.getElementById('selected-room-count');
                         if (checked > 0) {
-                            countDiv.textContent = 'ရွေးထားသော အခန်းအရေအတွက် - ' + toBurmeseNumber(checked) + ' ခန်း';
+                            let selectedRooms = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+                            countDiv.textContent = 'ရွေးထားသော အခန်းအရေအတွက် - ' + toBurmeseNumber(checked) + ' ခန်း (' + selectedRooms.join(', ') + ')';
+
                             countDiv.style.color = 'green';
                         } else {
                             countDiv.textContent = '‌ရွေးထားသော အခန်းအရေအတွက် မရှိပါ';

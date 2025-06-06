@@ -1,10 +1,10 @@
 <div class="modelinfo">
-                    <h4>Booking Information</h4>
-                    <input type="text" name="Name" placeholder="အမည်" required>
-                    <input type="phone" name="Phone" placeholder="ဖုန်းနံပါတ်" required>
+                    <h4 style="font-size: 16px;">Booking Information</h4>
+                    <input type="text" name="Name" id="nameInput" placeholder="အမည်" required style="padding: 5px 8px;">
+                    <input type="phone" name="Phone" id="phoneInput" placeholder="ဖုန်းနံပါတ်" required  style="padding: 5px 8px;">
 
 
-                    <input type="text" name="National" class="selectinput" list="nationalList" placeholder="နိုင်ငံသားရွေးပါ" required autocomplete="off" id="nationalInput">
+                    <input type="text" name="National" id="nationalInput" class="selectinput" list="nationalList" placeholder="နိုင်ငံသားရွေးပါ" required autocomplete="off" id="nationalInput"  style="padding: 5px 8px;">
                     <datalist id="nationalList">
                         <?php
                             foreach($countries as $key => $value):
@@ -12,7 +12,7 @@
                             endforeach;
                         ?>
                     </datalist>
-                    <input type="text" name="Meal" class="selectinput" list="mealList" placeholder="အစားအစာရွေးပါ" required autocomplete="off" id="mealInput">
+                    <input type="text" name="Meal" id="mealInput" class="selectinput" list="mealList" placeholder="အစားအစာရွေးပါ" required autocomplete="off" id="mealInput"  style="padding: 5px 8px;">
                     <datalist id="mealList">
                         <?php 
                             $sql = "SELECT * FROM meal";
@@ -30,15 +30,72 @@
                     
                     <div class="datesection">
                         <span>
-                            <label for="cin">Check-In</label>
-                            <input name="cin" type="date" required>
+                            <input name="cin" id="cinInput" type="text" required placeholder="Check In Date (dd-MM-yyyy)" onclick="showDatePicker(this)" onblur="formatDateInput(this)">
                         </span>
                         <span>
-                            <label for="cout">Check-Out</label>
-                            <input name="cout" type="date" required>
+                            <input name="cout" id="coutInput" type="text" required  placeholder="Check Out Date"  onclick="showDatePicker(this)" onblur="formatDateInput(this)">
                         </span>
                     </div>
                 </div>
+
+                
+                            <script>
+                            function formatDateInput(input) {
+                                // Only format if input type is text and value is not empty
+                                if (input.type === 'text' && input.value) {
+                                    var val = input.value.trim();
+                                    // If already in dd-MM-yyyy, do nothing
+                                    if (/^\d{2}-\d{2}-\d{4}$/.test(val)) return;
+                                    // If in yyyy-mm-dd, convert to dd-MM-yyyy
+                                    var match = val.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                                    if (match) {
+                                        input.value = match[3] + '-' + match[2] + '-' + match[1];
+                                        return;
+                                    }
+                                    // If in MM/dd/yyyy, convert to dd-MM-yyyy
+                                    match = val.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                                    if (match) {
+                                        input.value = match[2] + '-' + match[1] + '-' + match[3];
+                                        return;
+                                    }
+                                    // If in dd/MM/yyyy, convert to dd-MM-yyyy
+                                    match = val.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                                    if (match) {
+                                        input.value = match[1] + '-' + match[2] + '-' + match[3];
+                                        return;
+                                    }
+                                    // If in yyyy.MM.dd, convert to dd-MM-yyyy
+                                    match = val.match(/^(\d{4})\.(\d{2})\.(\d{2})$/);
+                                    if (match) {
+                                        input.value = match[3] + '-' + match[2] + '-' + match[1];
+                                        return;
+                                    }
+                                    // If in dd.MM.yyyy, convert to dd-MM-yyyy
+                                    match = val.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+                                    if (match) {
+                                        input.value = match[1] + '-' + match[2] + '-' + match[3];
+                                        return;
+                                    }
+                                }
+                            }
+                            </script>
+                            <script>
+                            function showDatePicker(input) {
+                                // Use browser's date picker if available
+                                if (input.type !== 'date') {
+                                    try {
+                                        input.type = 'date';
+                                        input.focus();
+                                        input.addEventListener('blur', function revertType() {
+                                            input.type = 'text';
+                                            input.removeEventListener('blur', revertType);
+                                        });
+                                    } catch (e) {
+                                        // fallback: do nothing
+                                    }
+                                }
+                            }
+                            </script>
                 <style>
                 .modelinfo {
                     width: 100%;

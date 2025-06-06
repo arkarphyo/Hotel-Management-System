@@ -12,13 +12,24 @@ if ($id === null) {
     exit;
 }
 
-$sql = "UPDATE roombook SET stat = 1 WHERE id = ?";
-$stmt = $conn->prepare($sql);
+$roombook_sql = "UPDATE roombook SET stat = 1 WHERE id = ?";
+
+$stmt = $conn->prepare($roombook_sql);
 
 if ($stmt) {
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        echo json_encode(["status" => "success", "message" => "Booking confirmed."]);
+        
+        $room_sql = "UPDATE room SET status = 1 WHERE id = ?";
+        $room_stmt = $conn->prepare($room_sql);
+        if ($room_stmt) {
+            $room_stmt->bind_param("i", $id);
+            $room_stmt->execute();
+            $room_stmt->close();
+            echo json_encode(["status" => "success", "message" => "Booking confirmed."]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to prepare room update statement."]);
+        }
     } else {
         echo json_encode(["status" => "error", "message" => "Failed to update booking."]);
     }
