@@ -7,6 +7,14 @@
 // }
 // setInterval(fetchBookings, 3000); // Refresh every 3 seconds
 
+// Ensure SweetAlert2 is loaded
+if (typeof Swal === 'undefined') {
+    const script = document.createElement('script');
+    script.src = '../admin/widget/js/sweetalert.js';
+    script.onload = () => console.log('SweetAlert2 loaded');
+    document.head.appendChild(script);
+}
+
 function confirmBookingBtn(bookingId){
     fetch(`../admin/actions/php/booking_confirm.php`, {
         method: 'POST',
@@ -25,12 +33,23 @@ function confirmBookingBtn(bookingId){
     })
     .then(data => {
         // Optionally handle response data here
-        location.reload();
+        Swal.fire({ 
+            icon: data.status === 'success' ? 'success' : 'error',
+            title: data.status === 'success' ? 'Booking Confirmed' : 'Error',
+            text: data.message || (data.status === 'success' ? 'The booking has been confirmed!' : 'Failed to confirm booking.'),
+            confirmButtonText: 'OK'
+        }).then((result)=>{
+            if (result.isConfirmed) {
+                // Optionally, you can redirect or perform another action
+                location.reload();
+            }   
+        })
+        //location.reload();
     })
     .catch(error => {
                      
         console.error('Error:', error);
-        alert('Failed to confirm booking.');
+        alert(`Failed to confirm booking.${error}`);
         return JSON.stringify({"status": "error", "message": "Failed to confirm booking."});
         // Handle errors here  
     });
@@ -99,6 +118,13 @@ function setBookingBtn() {
         // Optionally handle response data here
         console.log('Booking model data:', data);
         document.getElementById('setbookingmodel').style.display = 'none';
+        // Swal.fire({
+        //     icon: 'success',
+        //     title: 'Booking Successful',
+        //     text: 'The booking has been set successfully!',
+        //     confirmButtonText: 'OK'
+        // })
+
         location.reload();
     })
     .catch(error => {
