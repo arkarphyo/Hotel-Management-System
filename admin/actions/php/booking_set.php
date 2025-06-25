@@ -1,6 +1,9 @@
 <?php
 include("../../../config.php");
 header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+
+
 
 // Handle JSON input for fetch POST
 $input = json_decode(file_get_contents('php://input'), true);

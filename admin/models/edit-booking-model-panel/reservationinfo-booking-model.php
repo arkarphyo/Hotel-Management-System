@@ -7,14 +7,31 @@
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                // Each room label
-                                echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;">';
-                                echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" required>';
-                                echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
-                                echo '<i class="fa fa-bed"></i><br>';
-                                echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
-                                echo '</div>';
-                                echo '</label>';
+                                $booksql = "SELECT * FROM roombook WHERE stat = 1 AND JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
+                                $booked_result = mysqli_query($conn, $booksql);
+                                if (mysqli_num_rows($booked_result) > 0) {
+                                    // Each room label (disabled)
+                                    $row_booked = mysqli_fetch_assoc($booked_result);
+                                    // Extract only numbers from RoomNos and display them
+                                    $roomNumbers = preg_replace('/\D+/', '', $row_booked['RoomNos']);
+                                    echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;opacity:0.5;pointer-events:none;">';
+                                    echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" disabled>';
+                                    echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
+                                    echo '<i class="fa fa-bed"></i><br>';
+                                    echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
+                                    echo '</div>';
+                                    echo '</label>';
+                                }else{
+                                    // Each room label
+                                    echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;">';
+                                    echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;">';
+                                    echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
+                                    echo '<i class="fa fa-bed"></i><br>';
+                                    echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
+                                    echo '</div>';
+                                    echo '</label>';
+                                }
+                                
                             }
                         } else {
                             echo '<div>လွတ်လတ် နေသော အခန်းများမရှိပါ</div>';

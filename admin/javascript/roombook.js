@@ -6,6 +6,25 @@ openmodel = (modelpanel) => {
 closemodel = (modelpanel) => {
     modelpanel.style.display = "none";
 }
+editOpenmodelArg = (modelpanel, bookingId) => {
+    modelpanel.style.display = "flex";
+    // Fetch booking data
+    fetch('actions/php/get_booking_info.php?id=' + bookingId)
+        .then(response => response.json())
+        .then(data => {
+            // Populate fields
+            document.getElementById('editBookingId').value = data.id; // Use .value for input
+            document.getElementById('editNameInput').value = data.Name;
+            document.getElementById('editPhoneInput').value = data.Phone;
+            document.getElementById('editNationalInput').value = data.National;
+            document.getElementById('editMealInput').value = data.Meal;
+            document.getElementById('editCinInput').value = data.cin;
+            document.getElementById('editCoutInput').value = data.cout;
+            
+            // Add more fields as needed
+            // Populate reservation info if needed
+        });
+}
 
 
 //search bar logic using js

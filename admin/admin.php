@@ -36,19 +36,60 @@ if($usermail == true){
     <link rel="stylesheet" href="../assets/font-awesome/css/sharp-light.css"/>
     <script src="../assets/font-awesome/js/pro.min.js"></script>
     <title>Mount Royal - Admin Dashboard</title>
+   
 </head>
 
 <body>
 
 
     <!-- Loading screen -->
-    <div id="loading">
-         <svg class="spinner" viewBox="0 0 50 50">
-            <circle cx="25" cy="25" r="20" fill="none" stroke="#4CAF50" stroke-width="5" stroke-linecap="round"/>
-        </svg>  
-        <h3 class="gradient-text">ခဏစောင့်ပေးပါ...</h3>
-
+    <div id="loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 220px;">
+        <div style="position: relative; width: 60px; height: 60px; margin: 0 auto;">
+            <svg class="spinner" viewBox="0 0 30 30" style="width:60px; height:60px; position:absolute; top:0; left:0; z-index:1;">
+                <defs>
+                    <linearGradient id="spinner-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#bfa14a"/>
+                        <stop offset="100%" stop-color="#8c6d1f"/>
+                    </linearGradient>
+                </defs>
+                <circle
+                    cx="15"
+                    cy="15"
+                    r="13"
+                    fill="none"
+                    stroke="url(#spinner-gradient)"
+                    stroke-width="1"
+                    stroke-linecap="round"
+                    stroke-dasharray="25"
+                    stroke-dashoffset="10">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 15 15"
+                        to="360 15 15"
+                        dur="1.2s"
+                        repeatCount="indefinite"/>
+                </circle>
+            </svg>
+            <img src="../image/mrlogo.png" alt="Logo" style="position:absolute; top:50%; left:50%; width:36px; height:36px; transform:translate(-50%,-50%) scale(1); border-radius:50%; z-index:2; animation: logo-zoom 1.5s infinite alternate;">
+            <style>
+            @keyframes logo-zoom {
+                0% { transform: translate(-50%,-50%) scale(1);}
+                100% { transform: translate(-50%,-50%) scale(1.18);}
+            }
+            .spinner {
+                animation: spinner-rotate 1.2s linear infinite;
+            }
+            @keyframes spinner-rotate {
+                100% { transform: rotate(360deg);}
+            }
+            </style>
+        </div>  
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 80px;">
+            <span class="gradient-text" style="font-size:1.2rem;">ခဏစောင့်ပေးပါ...</span>
+        </div>
     </div>
+    
 
     <!-- mobile view -->
     <div id="mobileview">
@@ -57,79 +98,80 @@ if($usermail == true){
     </div>
   
     <!-- nav bar -->
-    <nav class="uppernav glass-blur" style="height:70px; border-radius: 0 0 0 0;">
-        <div class="logo">
-            <img class="bluebirdlogo" src="../image/mrlogo.png" width="60" height="60" alt="logo" style="margin-right:10px;">
+    <nav class="uppernav glass-blur" style="height:70px; border-radius: 0 0 0 0; position: relative; background: #fff; box-shadow: 0 8px 32px 0 rgba(10,24,61,0.25); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);">
+        <div class="logo gold-gradient-logo-bg" style="background: transparent; box-shadow: none; border-radius: 0 0 40px 0;">
+            <div style="position: relative; width: 120px; height: 120px; background: transparent;">
+            <img class="navlogo reflection-animate zoom-animate" src="../image/mrlogo.png" width="100" height="100" alt="Mount Royal Logo" style="border-radius: 24px; background: transparent; object-fit: cover; width: 120px; height: 120px; animation: zoom-perspective 2.5s ease-in-out infinite; box-shadow: none !important;">
+
+            <style>
+            @keyframes zoom-perspective {
+                0% {
+                    transform: perspective(400px) scale(1) rotateY(0deg);
+                    box-shadow: 0 4px 24px rgba(76,175,80,0.12);
+                }
+                20% {
+                    transform: perspective(400px) scale(1.08) rotateY(8deg);
+                    box-shadow: 0 8px 32px rgba(76,175,80,0.18);
+                }
+                50% {
+                    transform: perspective(400px) scale(1.15) rotateY(-8deg);
+                    box-shadow: 0 12px 40px rgba(76,175,80,0.22);
+                }
+                80% {
+                    transform: perspective(400px) scale(1.08) rotateY(8deg);
+                    box-shadow: 0 8px 32px rgba(76,175,80,0.18);
+                }
+                100% {
+                    transform: perspective(400px) scale(1) rotateY(0deg);
+                    box-shadow: 0 4px 24px rgba(76,175,80,0.12);
+                }
+            }
+            </style>
+            
+        </div>
             <p class="wave-text" style="font-size:1.3rem; background: linear-gradient(90deg, #bfa14a 0%, #ffd700 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
-                text-fill-color: transparent;">
-                <span style="font-size: 1.1rem; background: linear-gradient(90deg, #bfa14a 0%, #ffd700 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; text-fill-color: transparent;">Mount Royal</span>
-                <script>
-                    // Gradient gold reflection animation every 3 seconds
-                    function animateWaveText() {
-                        const p = document.querySelector('.wave-text');
-                        const text = "Mount Royal";
-                        p.innerHTML = '';
-                        for (let i = 0; i < text.length; i++) {
-                            const span = document.createElement('span');
-                            span.textContent = text[i];
-                            span.style.animationDelay = (i * 0.08) + 's';
-                            p.appendChild(span);
-                        }
-                        // Remove animation after it's done so it can be triggered again
-                        setTimeout(() => {
-                            p.innerHTML = text;
-                        }, 1200);
-                    }
-
-                    function goldReflection() {
-                        const p = document.querySelector('.wave-text');
-                        p.style.background = 'linear-gradient(90deg, #FFD700 20%, #FFF8DC 50%, #FFD700 80%)';
-                        p.style.webkitBackgroundClip = 'text';
-                        p.style.webkitTextFillColor = 'transparent';
-                        p.style.backgroundClip = 'text';
-                        p.style.textFillColor = 'transparent';
-                        p.style.transition = 'background 0.5s';
-                        setTimeout(() => {
-                            p.style.background = '';
-                            p.style.webkitBackgroundClip = '';
-                            p.style.webkitTextFillColor = '';
-                            p.style.backgroundClip = '';
-                            p.style.textFillColor = '';
-                        }, 1200);
-                    }
-
-                    animateWaveText();
-                    setInterval(() => {
-                        animateWaveText();
-                        goldReflection();
-                    }, 3000);
-                </script>
-            </p>
-            <style>
-                .wave-text {
-                    display: inline-block;
-                    font-size: 1.3rem !important;
+                text-fill-color: transparent; margin-left: 16px;">
+                <span class="gold-gradient-animate dark-gold-reflect">Mount Royal</span>
+                <style>
+                .dark-gold-reflect {
+                    color: #bfa14a;
                     font-weight: bold;
-                    color: #222;
-                    letter-spacing: 2px;
-                    margin: 0;
-                    text-shadow: 0 2px 8px rgba(255,255,255,0.4);
+                    position: relative;
+                    background: linear-gradient(90deg, #bfa14a 0%, #ffd700 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    text-fill-color: transparent;
+                    animation: gold-reflect-anim 2.5s linear infinite;
                 }
-                .wave-text span {
-                    display: inline-block;
-                    animation: wave 1s ease-in-out;
-                    animation-iteration-count: 1;
+                .dark-gold-reflect::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(120deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.05) 80%);
+                    opacity: 0.7;
+                    pointer-events: none;
+                    mix-blend-mode: lighten;
+                    animation: gold-reflect-gloss 2.5s linear infinite;
                 }
-                @keyframes wave {
-                    0% { transform: translateY(0); }
-                    20% { transform: translateY(-12px); color: #4CAF50; }
-                    40% { transform: translateY(0); color: #2196F3; }
-                    100% { transform: translateY(0); color: #222; }
+                @keyframes gold-reflect-anim {
+                    0% { filter: brightness(1) drop-shadow(0 0 6px #bfa14a); }
+                    50% { filter: brightness(1.15) drop-shadow(0 0 16px #ffd700); }
+                    100% { filter: brightness(1) drop-shadow(0 0 6px #bfa14a); }
                 }
-            </style>
+                @keyframes gold-reflect-gloss {
+                    0% { left: -100%; opacity: 0.5; }
+                    50% { left: 100%; opacity: 0.9; }
+                    100% { left: -100%; opacity: 0.5; }
+                }
+                </style>
+            </p>
         </div>
         
             <button class="glass-btn" onclick="logout()">Logout</button>
@@ -191,6 +233,9 @@ if($usermail == true){
     </nav>
     <style>
         .uppernav.glass-blur {
+            background: #fff !important;
+        }
+        .uppernav {
             position: relative;
             display: flex;
             justify-content: space-between;

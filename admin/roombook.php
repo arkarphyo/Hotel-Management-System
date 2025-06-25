@@ -25,17 +25,21 @@ include '../config.php';
 <body>
 
     <?php include "./models/setbooking-model.php"; ?>
+    <?php include "./models/editbooking-model.php"; ?>
     <!-- ================================================= -->
     <div class="searchsection d-flex justify-content-between align-items-center px-3 py-1" style="height:40px; min-height: 40px; margin:0;">
+        <!-- SEARCH BAR -->
         <input type="text" name="search_bar" id="search_bar" placeholder="search..." onkeyup="searchFun()" style="height:30px;">
+        <!-- SET BOOKING BUTTON -->
         <button class="adduser" id="adduser" onclick="openmodel(setbookingmodel)" style="height:32px;"><i class="fa-solid fa-tickets-perforated"></i> Set Booking </button>
+        <!-- EXPORT EXCEL BUTTON -->
         <form action="./exportdata.php" method="post" class="mb-0">
             <button class="excel-btn" id="excel-btn" name="exportexcel" type="submit" style="height:32px;"><i class="fa-solid fa-file-excel white-icon"></i> Export Excel</button>
         </form>
     </div>
     <div class="roombooktable" class="table-responsive-xl">
         <?php
-            $roombooktablesql = "SELECT * FROM roombook";
+            $roombooktablesql = "SELECT * FROM roombook ORDER BY id DESC";
             $roombookresult = mysqli_query($conn, $roombooktablesql);
             $nums = mysqli_num_rows($roombookresult);
         ?>
@@ -52,8 +56,9 @@ include '../config.php';
                 <th scope="col">အခန်းနံပါတ် </th>
                 <th scope="col">Check-In</th>
                 <th scope="col">Check-Out</th>
-                <th scope="col">နေထိုင်မည့် ရက်အရေအတွက် </th>
-                <th scope="col" colspan ="3" class="action">Action</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Status</th>
+                <th scope="col" colspan ="2" class="action">Action</th>
                 <!-- <th>Delete</th> -->
             </tr>
             </thead>
@@ -75,9 +80,11 @@ include '../config.php';
                         // Check if it's a JSON array
                         $roomNosArr = json_decode($roomNos, true);
                         if (is_array($roomNosArr)) {
-                            echo implode(', ', $roomNosArr);
+                            foreach ($roomNosArr as $roomNo) {
+                                echo "<span style='background: linear-gradient(90deg, #232526, #0f2027); color: #fff; border-radius: 8px; padding: 2px 8px; margin: 2px; display: inline-block; font-size: 0.95em;'>" . htmlspecialchars($roomNo) . "</span> ";
+                            }
                         } else {
-                            echo htmlspecialchars($roomNos);
+                            echo "<span>".htmlspecialchars($roomNos)."</span>";
                         }
                     ?>
                 </td>
@@ -88,18 +95,27 @@ include '../config.php';
                     if($res['stat'] == "1")
                     {
                     echo "<span style='color: green; text-shadow: 1px 1px 2px #28a745;'>Confirmed</span>";
-                    }
+                    }else if($res['stat'] == "2")
+                    {
+                          echo "<span style='color: red; text-shadow: 1px 1px 2px #dc3545;'>Cancelled</span>";
+                    }   
                     else
                     {
-                       echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button></a>";
+                       echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button>";
                     }
                 ?></td>
                 
                 <td class="action">
-                <a href="roombookedit.php?id=<?php echo $res['id'] ?>"><button class="btn btn-primary">Edit</button></a>
+                    <button class="btn btn-primary" onclick="editOpenmodelArg(editbookingmodel,<?php echo $res['id']; ?>) ">Edit</button>
                 </td>
-                <td class="action" >
-                <a href="roombookdelete.php?id=<?php echo $res['id'] ?>"><button class='btn btn-danger'>Delete</button></a>
+                <td class="action">
+                    <?php
+                        if ($res['stat'] == "2") {
+                            echo "<button class='btn btn-danger' disabled>Cancel</button>";
+                        } else {
+                            echo "<button class='btn btn-danger' onclick=cancelBookingBtn(".$res['id'].")>Cancel</button>";
+                        }
+                    ?>
                 </td>
             </tr>
             <?php

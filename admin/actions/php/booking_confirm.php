@@ -31,10 +31,27 @@ if ($stmt) {
                 $fetch_stmt->close();
                 // Handle multiple room numbers (comma-separated)
                 $room_numbers = array_map('trim', explode(',', $room_id));
-                json_encode($room_numbers); // Debugging line to check room numbers
-                $placeholders = implode(',', array_fill(0, count($room_numbers), '?'));
                 // Convert room numbers to integers for binding
+                
+                if (is_array(json_decode($room_id, true))) {
+                    // If RoomNos is a JSON array, decode it
+                    $room_numbers = json_decode($room_id, true);
+                } else {
+                    // Otherwise, treat as comma-separated string
+                    $room_numbers = array_map('trim', explode(',', $room_id));
+                }
                 $room_numbers_int = array_map('intval', $room_numbers);
+                $room_numbers_init = [];
+                foreach ($room_numbers as $num) {
+                    if (is_numeric($num)) {
+                        $room_numbers_init[] = $num;
+                    } else {
+                        echo json_encode(["status" => "error", "message" => "Invalid room number: $num"]);
+                        exit;
+                    }
+                }
+                // Prepare placeholders for the IN clause
+                $placeholders = implode(',', array_fill(0, count($room_numbers_init), '?'));
                 $room_sql = "UPDATE room SET status = 1 WHERE room_number IN ($placeholders)";
                 $room_stmt = $conn->prepare($room_sql);
                 if ($room_stmt) {
@@ -44,7 +61,12 @@ if ($stmt) {
                     $room_stmt->bind_param($types, ...$room_numbers_int);
                     $room_stmt->execute();
                     $room_stmt->close();
-                    echo json_encode(["status" => "success", "message" => "Booking confirmed."]);
+                    echo json_encode([
+                        "status" => "success",
+                        "message" => "Booking confirmed.",
+                        "booking_id" => $id,
+                        "room_numbers" => $room_numbers_int
+                    ]);
                 } else {
                     echo json_encode(["status" => "error", "message" => "Failed to prepare room update statement."]);
                 }

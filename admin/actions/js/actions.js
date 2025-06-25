@@ -15,16 +15,29 @@ if (typeof Swal === 'undefined') {
     document.head.appendChild(script);
 }
 
+// Confirm booking function
 function confirmBookingBtn(bookingId){
-    fetch(`../admin/actions/php/booking_confirm.php`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id: bookingId
-        })
-    })
+    Swal.fire({
+        title: 'Confirm Booking',
+        text: "Are you sure you want to confirm this booking?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, confirm it!'
+    }).then((result) => {
+        if (result.isConfirmed) { 
+            // Call the function to confirm the booking
+            fetch(`../admin/actions/php/booking_confirm.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: bookingId
+                })
+            })      
+    
     .then(response => {
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -53,8 +66,65 @@ function confirmBookingBtn(bookingId){
         return JSON.stringify({"status": "error", "message": "Failed to confirm booking."});
         // Handle errors here  
     });
+        }})
 }
 
+// Cancel booking function
+function cancelBookingBtn(bookingId){
+    Swal.fire({
+        title: 'Deleted Booking',
+        text: "Are you sure you want to delete this booking?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) { 
+            // Call the function to confirm the booking
+            fetch(`../admin/actions/php/booking_delete.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: bookingId
+                })
+            })      
+    
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Optionally handle response data here
+        Swal.fire({ 
+            icon: data.status === 'success' ? 'success' : 'error',
+            title: data.status === 'success' ? `#ID ${bookingId}: Booking deleted` : 'Error',
+            text: data.message || (data.status === 'success' ? 'The booking has been deleted!' : 'Failed to confirm booking.'),
+            confirmButtonText: 'OK'
+        }).then((result)=>{
+            if (result.isConfirmed) {
+                // Optionally, you can redirect or perform another action
+                location.reload();
+            }   
+        })
+        //location.reload();
+    })
+    .catch(error => {
+                     
+        console.error('Error:', error);
+        alert(`Failed to delete booking.${error}`);
+        return JSON.stringify({"status": "error", "message": "Failed to delete booking."});
+        // Handle errors here  
+    });
+        }})
+}
+
+
+// Set booking button function
 function setBookingBtn() {
     const Name = document.getElementById('nameInput').value;
     const National = document.getElementById('nationalInput').value;
@@ -68,7 +138,7 @@ function setBookingBtn() {
     //const bedValue = document.getElementById('bedTypeSelect').value;
     const Bed = "Bed Type";
     const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
-    const Meal = document.getElementById('mealInput').value;
+    const Meal = document.getElementById('mealInput').checked ? 1 : 0;
     const cin = document.getElementById('cinInput').value;
     const cout = document.getElementById('coutInput').value;
     alert(`${Name}, ${National}, ${Phone}, ${RoomType}, ${RoomNos}, ${Bed}, ${NoofRoom}, ${Meal}, ${cin}, ${cout}`);
@@ -90,7 +160,7 @@ function setBookingBtn() {
         return;
     }
 
-    fetch(`/Hotel-Management-System/admin/actions/php/booking_set.php`, {
+    fetch('../admin/actions/php/booking_set.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -118,17 +188,28 @@ function setBookingBtn() {
         // Optionally handle response data here
         console.log('Booking model data:', data);
         document.getElementById('setbookingmodel').style.display = 'none';
-        // Swal.fire({
-        //     icon: 'success',
-        //     title: 'Booking Successful',
-        //     text: 'The booking has been set successfully!',
-        //     confirmButtonText: 'OK'
-        // })
+        Swal.fire({
+            icon: 'success',
+            title: 'Booking Successful',
+            text: 'The booking has been set successfully!',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            // Optionally, you can redirect or perform another action
+            // For example, reload the page to see the updated bookings
+            if (result.isConfirmed) {
+             location.reload();
+            }
+        });
 
-        location.reload();
     })
     .catch(error => {
         console.error('Fetching Set Booking Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Failed to set booking model data. ${error}`,
+            confirmButtonText: 'OK'
+        })
         alert('Failed to fetch booking model data.', cin);
     });
 }

@@ -1,8 +1,8 @@
-<!-- setbookingmodel start -->
+<!-- editbookingmodel start -->
       
 <style>
 
-    #setbookingmodel{
+    #editbookingmodel{
         position : fixed;
         z-index: 1000;
         height: 70vh;
@@ -14,7 +14,7 @@
         background-color: #00000079;
     }
 
-    #setbookingmodel .setbookingform{
+    #editbookingmodel .editbookingform{
         height: 70vh;
         min-height: 300px;
         max-height: 70vh;
@@ -30,7 +30,7 @@
     }
 
 
-    .setbookingform .head{
+    .editbookingform .head{
         /* width: 100%; */
         padding: 0 10px;
         height: 40px;
@@ -39,24 +39,24 @@
         justify-content: space-between;
     }
 
-    .setbookingform .head h3{
+    .editbookingform .head h3{
         color: #111f49;
         position: relative;
         left: 40%;
         margin-top: 10px;
     }
-    .setbookingform .head i{
+    .editbookingform .head i{
         font-size: 25px;
         cursor: pointer;
     }
 
-    .setbookingform .middle{
+    .editbookingform .middle{
         width: 100%;
         margin: 10px 0 0 0;
         display: flex;
     }
 
-    .setbookingform .middle .modelinfo{
+    .editbookingform .middle .modelinfo{
         width: 100%;
         background-color: rgba(255, 255, 255, 0.752);
         padding: 20px;
@@ -64,7 +64,7 @@
         flex-direction: column;
         align-items: center;
     }
-    .setbookingform .middle .reservationinfo{
+    .editbookingform .middle .reservationinfo{
         
         width: 100%;
         background-color: rgba(255, 255, 255, 0.752);
@@ -74,7 +74,7 @@
         align-items: center;
     }
 
-    .setbookingform .footer{
+    .editbookingform .footer{
         height: 50px;
         display: flex;
         justify-content: center;
@@ -90,25 +90,25 @@
 
 </style>
 
-    <div id="setbookingmodel">
-        <form action="" method="POST" class="setbookingform glass-blur macbook-popup" style="height: 75vh; min-height: 250px; max-height:85vh; animation: macbookPopup 0.4s cubic-bezier(.4,0,.2,1); box-shadow: 0 16px 48px rgba(0,0,0,0.22); border-radius: 18px 18px 18px 18px/18px 18px 18px 18px;">
+    <div id="editbookingmodel">
+        <form action="" method="POST" class="editbookingform glass-blur macbook-popup" style="height: 75vh; min-height: 250px; max-height:85vh; animation: macbookPopup 0.4s cubic-bezier(.4,0,.2,1); box-shadow: 0 16px 48px rgba(0,0,0,0.22); border-radius: 18px 18px 18px 18px/18px 18px 18px 18px;">
             <div class="head" style="height: 32px; padding: 0 12px; border-radius: 18px 18px 0 0; background: linear-gradient(90deg, #e3e6ea 0%, #cfd8e3 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; align-items: center;">
-                <h3 style="font-size: 1.1rem; margin: 0 auto; position: static; flex: 1; text-align: center; color: #222d3b;">BOOKING</h3>
+                <h3 style="font-size: 1.1rem; margin: 0 auto; position: static; flex: 1; text-align: center; color: #222d3b;"><span id="bookingId"></span> - EDIT BOOKING</h3>
                 <i class="fa-solid fa-circle-xmark" style="font-size: 20px; transition: transform 0.18s cubic-bezier(.4,0,.2,1), color 0.18s; color: #6b7280;" 
                    onmouseover="this.style.transform='scale(1.18) rotate(8deg)'; this.style.color='#e74c3c';" 
                    onmouseout="this.style.transform='scale(1) rotate(0deg)'; this.style.color='#6b7280';" 
-                   onclick="closemodel(setbookingmodel)">
+                   onclick="closemodel(editbookingmodel)">
                 </i>
             </div>
             <div class="middle" style="height: 70vh; max-height: 70vh;">
-                <?php include(__DIR__ . '/set-booking-model-panel/info-booking-model.php'); ?>
+                <?php include(__DIR__ . '/edit-booking-model-panel/info-booking-model.php'); ?>
 
                 <div class="line"></div>
                 
-                <?php include(__DIR__ . '/set-booking-model-panel/reservationinfo-booking-model.php'); ?>
+                <?php include(__DIR__ . '/edit-booking-model-panel/reservationinfo-booking-model.php'); ?>
             </div>
             <div class="footer" style="position: absolute; bottom: 0; left: 0; width: 100%;">
-                <?php include(__DIR__ . '/set-booking-model-panel/footer-booking-model.php'); ?>
+                <?php include(__DIR__ . '/edit-booking-model-panel/footer-booking-model.php'); ?>
             </div>
         </form>
     </div>
