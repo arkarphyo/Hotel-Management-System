@@ -7,8 +7,9 @@
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                $booksql = "SELECT * FROM roombook WHERE stat = 1 AND JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
+                                $booksql = "SELECT * FROM roombook WHERE stat = 0 AND JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
                                 $booked_result = mysqli_query($conn, $booksql);
+                                
                                 if (mysqli_num_rows($booked_result) > 0) {
                                     // Each room label (disabled)
                                     $row_booked = mysqli_fetch_assoc($booked_result);

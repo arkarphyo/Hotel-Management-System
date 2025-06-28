@@ -1,4 +1,3 @@
-
 <div class="modelinfo">
             <h4 style="font-size: 16px;">Booking Information</h4>
                     <input type="text" name="Name" id="nameInput" placeholder="အမည်" required style="padding: 5px 8px;">
@@ -46,19 +45,52 @@
                     
                     <div class="datesection">
                         <span>
-                            <input name="cin" id="cinInput" type="text" required placeholder="Check In Date (dd-MM-yyyy)" 
+                            <input name="cin" id="cinInput" type="text" required placeholder="Check In Date (yyyy-MM-dd)" 
                                 onclick="showDatePicker(this)" 
                                 onblur="formatDateInput(this)"
                                 onkeydown="if(event.code==='Space' || event.key===' '){showDatePicker(this);}">
                         </span>
                         <span>
-                            <input name="cout" id="coutInput" type="text" required placeholder="Check Out Date" 
+                            <input name="cout" id="coutInput" type="text" required placeholder="Check Out Date (yyyy-MM-dd)" 
                                 onclick="showDatePicker(this)" 
                                 onblur="formatDateInput(this)"
                                 onkeydown="if(event.code==='Space' || event.key===' '){showDatePicker(this);}">
                         </span>
                     </div>
+                    
+                    <div id="durationDisplay" style="width:100%;max-width:350px;margin-bottom:12px;font-size:15px;color:#1a237e;text-align:left;">တည်းခိုရန်ကြာချိန် : </div>
                 </div>
+                    <script>
+                    function parseDate(str) {
+                        // Accepts yyyy-MM-dd
+                        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                        if (!m) return null;
+                        return new Date(m[1], m[2] - 1, m[3]);
+                    }
+                    function updateDuration() {
+                        var cin = document.getElementById('cinInput').value.trim();
+                        var cout = document.getElementById('coutInput').value.trim();
+                        var display = document.getElementById('durationDisplay');
+                        if (!cin || !cout) {
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: : ";
+                            return;
+                        }
+                        var d1 = parseDate(cin);//FORMAT IS yyyy-MM-dd
+                        var d2 = parseDate(cout);
+                        if (!d1 || !d2) {
+                            display.textContent = "Duration: Invalid date format";
+                        } else if (d2 > d1) {
+                            var diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: " + toBurmeseNumber(diff)  + "ရက်";
+                        } else {
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: : Invalid date range";
+                        }
+                    }
+                    document.getElementById('cinInput').addEventListener('input', updateDuration);
+                    document.getElementById('coutInput').addEventListener('input', updateDuration);
+                    // Initial call to show duration if values are pre-filled
+                    updateDuration();
+                    </script>
 
                 
                             <script>
@@ -66,36 +98,36 @@
                                 // Only format if input type is text and value is not empty
                                 if (input.type === 'text' && input.value) {
                                     var val = input.value.trim();
-                                    // If already in dd-MM-yyyy, do nothing
-                                    if (/^\d{2}-\d{2}-\d{4}$/.test(val)) return;
-                                    // If in yyyy-mm-dd, convert to dd-MM-yyyy
-                                    var match = val.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                                    // If already in yyyy-MM-dd, do nothing
+                                    if (/^\d{4}-\d{2}-\d{2}$/.test(val)) return;
+                                    // If in dd-MM-yyyy, convert to yyyy-MM-dd
+                                    var match = val.match(/^(\d{2})-(\d{2})-(\d{4})$/);
                                     if (match) {
                                         input.value = match[3] + '-' + match[2] + '-' + match[1];
                                         return;
                                     }
-                                    // If in MM/dd/yyyy, convert to dd-MM-yyyy
+                                    // If in MM/dd/yyyy, convert to yyyy-MM-dd
                                     match = val.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                                     if (match) {
-                                        input.value = match[2] + '-' + match[1] + '-' + match[3];
+                                        input.value = match[3] + '-' + match[1] + '-' + match[2];
                                         return;
                                     }
-                                    // If in dd/MM/yyyy, convert to dd-MM-yyyy
+                                    // If in dd/MM/yyyy, convert to yyyy-MM-dd
                                     match = val.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
                                     if (match) {
-                                        input.value = match[1] + '-' + match[2] + '-' + match[3];
+                                        input.value = match[3] + '-' + match[2] + '-' + match[1];
                                         return;
                                     }
-                                    // If in yyyy.MM.dd, convert to dd-MM-yyyy
+                                    // If in yyyy.MM.dd, convert to yyyy-MM-dd
                                     match = val.match(/^(\d{4})\.(\d{2})\.(\d{2})$/);
                                     if (match) {
-                                        input.value = match[3] + '-' + match[2] + '-' + match[1];
+                                        input.value = match[1] + '-' + match[2] + '-' + match[3];
                                         return;
                                     }
-                                    // If in dd.MM.yyyy, convert to dd-MM-yyyy
+                                    // If in dd.MM.yyyy, convert to yyyy-MM-dd
                                     match = val.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
                                     if (match) {
-                                        input.value = match[1] + '-' + match[2] + '-' + match[3];
+                                        input.value = match[3] + '-' + match[2] + '-' + match[1];
                                         return;
                                     }
                                 }

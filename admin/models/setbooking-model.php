@@ -97,7 +97,7 @@
                 <i class="fa-solid fa-circle-xmark" style="font-size: 20px; transition: transform 0.18s cubic-bezier(.4,0,.2,1), color 0.18s; color: #6b7280;" 
                    onmouseover="this.style.transform='scale(1.18) rotate(8deg)'; this.style.color='#e74c3c';" 
                    onmouseout="this.style.transform='scale(1) rotate(0deg)'; this.style.color='#6b7280';" 
-                   onclick="closemodel(setbookingmodel)">
+                   onclick="closemodel(setbookingmodel); resetSetBookingForm();">
                 </i>
             </div>
             <div class="middle" style="height: 70vh; max-height: 70vh;">
@@ -139,6 +139,22 @@
     <!-- setbookingmodel end -->
     <script src="actions/js/actions.js"></script>
     <script>
+    function resetSetBookingForm() {
+        var form = document.querySelector('#setbookingmodel form');
+        if (form) {
+            form.reset();
+            // Also clear custom UI fields if needed
+            var selects = form.querySelectorAll('select');
+            selects.forEach(function(sel) { sel.selectedIndex = 0; });
+            var durationDisplay = form.querySelector('#durationDisplay');
+            if (durationDisplay) durationDisplay.textContent = 'Duration: ';
+            // Uncheck checkboxes and reset icons if needed
+            var mealCheckbox = form.querySelector('#mealInput');
+            if (mealCheckbox) mealCheckbox.checked = false;
+            var yolk = form.querySelector('#eggYolk');
+            if (yolk) yolk.setAttribute('fill', '#ffb300');
+        }
+    }
     // Attach ripple effect to dynamically created bedTypeSelect dropdowns
     document.addEventListener('mousedown', function(e) {
         if (e.target && e.target.id === 'bedTypeSelect') {

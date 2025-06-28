@@ -58,7 +58,39 @@
                                 onkeydown="if(event.code==='Space' || event.key===' '){showDatePicker(this);}">
                         </span>
                     </div>
+                    <div id="editDurationDisplay" style="width:100%;max-width:350px;margin-bottom:12px;font-size:15px;color:#1a237e;text-align:left;">Duration : </div>
                 </div>
+                <script>
+                    function parseDate(str) {
+                        // Accepts yyyy-MM-dd
+                        var m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                        if (!m) return null;
+                        return new Date(m[1], m[2] - 1, m[3]);
+                    }
+                    function updateDuration() {
+                        var cin = document.getElementById('editCinInput').value.trim();
+                        var cout = document.getElementById('editCoutInput').value.trim();
+                        var display = document.getElementById('editDurationDisplay');
+                        if (!cin || !cout) {
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: : ";
+                            return;
+                        }
+                        var d1 = parseDate(cin);//FORMAT IS yyyy-MM-dd
+                        var d2 = parseDate(cout);
+                        if (!d1 || !d2) {
+                            display.textContent = "Duration: Invalid date format";
+                        } else if (d2 > d1) {
+                            var diff = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: " + toBurmeseNumber(diff)  + "ရက်";
+                        } else {
+                            display.textContent = "တည်ခိုရန် ကြာချိန်: : Invalid date range";
+                        }
+                    }
+                    document.getElementById('editCinInput').addEventListener('input', updateDuration);
+                    document.getElementById('editCoutInput').addEventListener('input', updateDuration);
+                    // Initial call to show duration if values are pre-filled
+                    updateDuration();
+                    </script>
 
                 
                             <script>

@@ -1,0 +1,24 @@
+/* ...existing code... */
+input[type="number"], 
+select {
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    /* Ensure consistent border and background */
+    border: 1px solid #ccc;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+input[type="number"] {
+    /* Remove spinner arrows for consistency if desired */
+    -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0; 
+}
+/* ...existing code... */

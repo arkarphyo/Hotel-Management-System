@@ -42,20 +42,6 @@ foreach ($required as $field) {
     }
 }
 
-// Room availability logic (as before)
-$rsql = "SELECT * FROM room WHERE status = 0";
-$available_room = mysqli_query($conn, $rsql);
-$rooms = [];
-while ($row = mysqli_fetch_assoc($available_room)) {
-    $rooms[] = [
-        'room_number' => $row['room_number'],
-        'id' => $row['id'],
-        'type' => $row['type'],
-        'bedding' => $row['bedding'],
-        'status' => $row['status']
-    ];
-}
-
 
 if (!empty($missing)) {
     echo json_encode([
@@ -65,7 +51,6 @@ if (!empty($missing)) {
     exit;
 } else {
     $sta = "NotConfirm";
-    // Calculate number of days between check-in and check-out
     // Calculate number of days between check-in and check-out
     try {
         if (empty($cin) || empty($cout)) {
@@ -94,22 +79,6 @@ if (!empty($missing)) {
                 ]);
                 exit;
             }
-            
-            
-            
-            // Uncomment the following lines if you want to validate the date range
-            // $cin = date('Y-m-d', strtotime($data['cin']));
-            // $date1 = new DateTime($data['cin']);
-            // $date2 = new DateTime($data['cout']);
-            // if ($date1 > $date2) {
-            //     echo json_encode([
-            //         "status" => "error",
-            //         "message" => "Check-in date cannot be later than check-out date."
-            //     ]);
-            //     exit;
-            // }
-            // $interval = $date1->diff($date2);
-            // $nodays = $interval->days;
         }
     } catch (Exception $e) {
         echo json_encode([
@@ -118,22 +87,6 @@ if (!empty($missing)) {
         ]);
         exit;
     }
-
-    // Validate RoomNos exists and is available
-    // $room_check_sql = "SELECT * FROM room WHERE room_number = ? AND status = 0";
-    // $room_check_stmt = $conn->prepare($room_check_sql);
-    // $room_check_stmt->bind_param("s", $RoomNos);
-    // $room_check_stmt->execute();
-    // $room_result = $room_check_stmt->get_result();
-    // if ($room_result->num_rows === 0) {
-    //     echo json_encode([
-    //         "status" => "error",
-    //         "message" => "Selected room number is not available or does not exist."
-    //     ]);
-    //     $room_check_stmt->close();
-    //     exit;
-    // }
-    // $room_check_stmt->close();
 
     $sql = "INSERT INTO roombook(Name,Phone,National,RoomNos,RoomType,Bed,NoofRoom,Breakfast,cin,cout,nodays,stat) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     $stmt = $conn->prepare($sql);
@@ -159,38 +112,29 @@ if (!empty($missing)) {
             $stat
         );
         try {
-             if ($stmt->execute()) {
-            echo json_encode([
-                "status" => "success",
-                "message" => "Reservation successful"
-            ]);
-        } else {
-            echo json_encode([
-                "status" => "error",
-                "message" => "Something went wrong"
-            ]);
-        }
-        $stmt->close();
+            if ($stmt->execute()) {
+                echo json_encode([
+                    "status" => "success",
+                    "message" => "Reservation successful"
+                ]);
+                $stmt->close();
+                exit;
+            } else {
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "Something went wrong"
+                ]);
+                $stmt->close();
+                exit;
+            }
         } catch (Throwable $th) {
             echo json_encode([
                 "status" => "error",
                 "message" => "Error executing statement: " . $th->getMessage()
             ]);
+            $stmt->close();
+            exit;
         }
-       
-    } else {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Failed to prepare statement"
-        ]);
     }
-    exit;
-}
-// If this is a fetch request for room availability
-if (is_array($RoomNos)) {
-    $RoomNosJson = json_encode($RoomNos);
-} else {
-    // If it's a single value, wrap it in an array
-    $RoomNosJson = json_encode([$RoomNos]);
 }
 ?>

@@ -1,7 +1,6 @@
 <?php
 session_start();
 include '../config.php';
-
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +93,19 @@ include '../config.php';
                 <td><?php 
                     if($res['stat'] == "1")
                     {
-                    echo "<span style='color: green; text-shadow: 1px 1px 2px #28a745;'>Confirmed</span>";
+                        // Fetch count from checkn_info for this booking
+                        $id = $res['id'];
+                        $badgeCount = 0;
+                        $badgeSql = "SELECT COUNT(*) as cnt FROM checkn_info WHERE booking_id = $id";
+                        $badgeResult = mysqli_query($conn, $badgeSql);
+                        if ($badgeResult && $row = mysqli_fetch_assoc($badgeResult)) {
+                            $badgeCount = (int)$row['cnt'];
+                        }
+                        $badgeHtml = "<span class='badge bg-warning text-dark position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>!</span>";
+                        if ($badgeCount > 0) {
+                            $badgeHtml = "<span class='badge bg-warning text-dark position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>$badgeCount</span>";
+                        }
+                        echo "<button class='btn btn-success position-relative' onclick='setupInfoBtn(".$res['id'].")'>Setup Info $badgeHtml</button>";
                     }else if($res['stat'] == "2")
                     {
                           echo "<span style='color: red; text-shadow: 1px 1px 2px #dc3545;'>Cancelled</span>";
