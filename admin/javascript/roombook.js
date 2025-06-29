@@ -17,10 +17,11 @@ editOpenmodelArg = (modelpanel, bookingId) => {
             document.getElementById('editNameInput').value = data.Name;
             document.getElementById('editPhoneInput').value = data.Phone;
             document.getElementById('editNationalInput').value = data.National;
-            document.getElementById('editMealInput').value = data.Meal;
             document.getElementById('editCinInput').value = data.cin;
             document.getElementById('editCoutInput').value = data.cout;
-            document.getElementById('editMealInput').selected = data.Meal == 1 ? true : false;
+            document.getElementById('editMealInput').checked = data.Breakfast == 1 ? true : false;
+            
+            updateDuration();
             
             // Add more fields as needed
             // Populate reservation info if needed

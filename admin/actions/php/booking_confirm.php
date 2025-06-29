@@ -52,7 +52,9 @@ if ($stmt) {
                 }
                 // Prepare placeholders for the IN clause
                 $placeholders = implode(',', array_fill(0, count($room_numbers_init), '?'));
-                $room_sql = "UPDATE room SET status = 1 WHERE room_number IN ($placeholders)";
+                $room_sql = "UPDATE room SET status = 1, booking_id = ? WHERE room_number IN ($placeholders)";
+                // Add booking_id to the beginning of the parameters array
+                array_unshift($room_numbers_int, $id);
                 $room_stmt = $conn->prepare($room_sql);
                 if ($room_stmt) {
                     // Dynamically build the types string (all integers)

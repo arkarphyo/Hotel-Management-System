@@ -244,6 +244,28 @@ function setBookingBtn() {
     }
 }
 
+function editBookingBtn(){
+    const bookingId = document.getElementById('editBookingId').value;
+    const Name = document.getElementById('editNameInput').value;
+    const National = document.getElementById('editNationalInput').value;
+    const Phone = document.getElementById('editPhoneInput').value;
+    //const roomTypeValue = document.getElementById('roomTypeSelect').value;
+    const RoomType = "Romm Type";
+    //const roomNosValue = document.getElementById('roomNosInput').value;
+    const RoomNosArray = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+    // Convert RoomNos array to JSON string
+    const RoomNos = JSON.stringify(RoomNosArray);
+    //const bedValue = document.getElementById('bedTypeSelect').value;
+    const Bed = "Bed Type";
+    const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
+    const Meal = document.getElementById('editMealInput').checked ? 1 : 0;
+    const cin = document.getElementById('editCinInput').value;
+    const cout = document.getElementById('editCoutInput').value;
+
+   
+   
+}
+
 // Show booking info function
 function setupInfoBtn(id) {
     // You can fetch more details from the server if needed
@@ -409,14 +431,17 @@ function setupInfoBtn(id) {
                     .then(response => response.json())
                     .then(data => {
                         if (data.status !== 'success') {
-                            Swal.fire('Error', data.message || 'Failed to save check-in info.', 'error');
+                            Swal.fire('Error', data.message || `Failed to save check-in info. ${data.booking_id}`, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error saving check-in info:', error);
                         Swal.fire('Error', 'Failed to save check-in info.', 'error');
                     });
-                    Swal.fire('Saved!', 'Check-in info has been updated.', 'success');
+                    Swal.fire('Saved!', 'Check-in info has been updated.', 'success').then(() => {
+                        location.reload(); // Reload the page to reflect changes
+                    });
+                    
                 }
             });
         })

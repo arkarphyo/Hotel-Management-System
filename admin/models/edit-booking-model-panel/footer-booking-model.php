@@ -1,5 +1,5 @@
 
-<button class="btn btn-success btn-sm" name="setbookingbtn" onclick="setBookingBtn()">Submit</button>
+<button class="btn btn-success btn-sm" name="editbookingbtn" onclick="editBookingBtn()">Submit</button>
 
 <script>
     

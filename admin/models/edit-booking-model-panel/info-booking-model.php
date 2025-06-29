@@ -1,7 +1,7 @@
 
 <div class="modelinfo">
             <h4 style="font-size: 16px;">Booking Information</h4>
-                    <input type="input" name="ID" id="editBookingId" value="" disabled>
+                    <input  type="input" name="ID" id="editBookingId" value="" disabled>
                     <input type="text" name="Name" id="editNameInput" placeholder="အမည်" required style="padding: 5px 8px;">
                     <input type="phone" name="Phone" id="editPhoneInput" placeholder="ဖုန်းနံပါတ်" required  style="padding: 5px 8px;">
 

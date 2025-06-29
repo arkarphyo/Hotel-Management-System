@@ -11,6 +11,7 @@ if ($conn->connect_error) {
 $data = json_decode(file_get_contents('php://input'), true);
 
 $required_fields = ['booking_id','name','fat_name', 'age', 'gender', 'nrc_no', 'work', 'indate', 'outdate', 'address', 'remark'];
+
 $missing = [];
 foreach ($required_fields as $field) {
     if (empty($data[$field])) {
@@ -26,18 +27,18 @@ if (!empty($missing)) {
 // Prepare and execute insert (adjust table/column names as needed)
 $stmt = $conn->prepare("INSERT INTO checkn_info (booking_id, name, fat_name, age, gender, nrc_no, work, in_date, out_date, address, remark) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param(
-    "sissssss",
-    data['bookingId'],
-    data['name'],
-    data['fat_name'],
-    data['age'],
-    data['gender'],
-    data['nrc_no'],
-    data['work'],
-    data['in_date'],
-    data['out_date'],
-    data['address'],
-    data['remark'],
+    "ississsssss",
+    $data['booking_id'],
+    $data['name'],
+    $data['fat_name'],
+    $data['age'],
+    $data['gender'],
+    $data['nrc_no'],
+    $data['work'],
+    $data['indate'],
+    $data['outdate'],
+    $data['address'],
+    $data['remark']
 );
 
 if ($stmt->execute()) {

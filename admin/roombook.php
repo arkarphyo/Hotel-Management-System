@@ -29,22 +29,76 @@ include '../config.php';
     <div class="searchsection d-flex justify-content-between align-items-center px-3 py-1" style="height:40px; min-height: 40px; margin:0;">
         <!-- SEARCH BAR -->
         <input type="text" name="search_bar" id="search_bar" placeholder="search..." onkeyup="searchFun()" style="height:30px;">
+        <!-- DATE RANGE FILTER -->
+        <form class="d-flex align-items-center" method="get" action="" style="gap: 5px;">
+            <label for="from_date" class="mb-0" style="color: #fff;">From:</label>
+            <input 
+                type="date" 
+                id="from_date" 
+                name="from_date" 
+                value="<?php echo isset($_GET['from_date']) ? htmlspecialchars($_GET['from_date']) : ''; ?>" 
+                style="
+                    height:30px;
+                    border-radius: 12px;
+                    border: none;
+                    background: #FFFFFF;
+                    backdrop-filter: blur(6px);
+                    -webkit-backdrop-filter: blur(6px);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    color: #222;
+                    padding: 0 10px;
+                "
+            >
+            <label for="to_date" class="mb-0"  style="color: #fff;">To:</label>
+            <input type="date" id="to_date" name="to_date" value="<?php echo isset($_GET['to_date']) ? htmlspecialchars($_GET['to_date']) : ''; ?>" style="
+                    height:30px;
+                    border-radius: 12px;
+                    border: none;
+                    background: #FFFFFF;
+                    backdrop-filter: blur(6px);
+                    -webkit-backdrop-filter: blur(6px);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    color: #222;
+                    padding: 0 10px;
+                ">
+            <button type="submit" class="btn btn-primary btn-sm" style="height:32px;">Search</button>
+        </form>
+        <?php
+        // Filter SQL by date range if set
+        $roombooktablesql = "SELECT * FROM roombook";
+        $where = [];
+        if (!empty($_GET['from_date'])) {
+            $from = mysqli_real_escape_string($conn, $_GET['from_date']);
+            $where[] = "cin >= '$from'";
+        }
+        if (!empty($_GET['to_date'])) {
+            $to = mysqli_real_escape_string($conn, $_GET['to_date']);
+            $where[] = "cin <= '$to'";
+        }
+        if ($where) {
+            $roombooktablesql .= " WHERE " . implode(" AND ", $where);
+        }
+        $roombooktablesql .= " ORDER BY id DESC";
+        $roombookresult = mysqli_query($conn, $roombooktablesql);
+        $nums = mysqli_num_rows($roombookresult);
+        ?>
         <!-- SET BOOKING BUTTON -->
         <button class="adduser" id="adduser" onclick="openmodel(setbookingmodel)" style="height:32px;"><i class="fa-solid fa-tickets-perforated"></i> Set Booking </button>
+        
         <!-- EXPORT EXCEL BUTTON -->
         <form action="./exportdata.php" method="post" class="mb-0">
             <button class="excel-btn" id="excel-btn" name="exportexcel" type="submit" style="height:32px;"><i class="fa-solid fa-file-excel white-icon"></i> Export Excel</button>
         </form>
     </div>
     <div class="roombooktable" class="table-responsive-xl">
-        <?php
-            $roombooktablesql = "SELECT * FROM roombook ORDER BY id DESC";
-            $roombookresult = mysqli_query($conn, $roombooktablesql);
-            $nums = mysqli_num_rows($roombookresult);
-        ?>
+        <!-- <?php
+            // $roombooktablesql = "SELECT * FROM roombook ORDER BY id DESC";
+            // $roombookresult = mysqli_query($conn, $roombooktablesql);
+            // $nums = mysqli_num_rows($roombookresult);
+        ?> -->
         
-        <table class="table table-bordered table-hover" id="table-data">
-            <thead>
+        <table class="table table-bordered table-hover" id="table-data" style="border-collapse: separate; border-spacing: 0;">
+            <thead class="bg-dark text-white" style="position: sticky; top: 40px; z-index: 99;">
             <tr class="text-center align-middle">
                 <th scope="col" >NO</th>
                 <th scope="col">အမည်</th>
@@ -64,9 +118,11 @@ include '../config.php';
 
             <tbody>
             <?php
+            $rowIndex = 0;
             while ($res = mysqli_fetch_array($roombookresult)) {
+                $rowClass = ($rowIndex % 2 == 0) ? 'table-light' : 'table-secondary';
             ?>
-            <tr class="text-center align-middle">
+            <tr class="text-center align-middle <?php echo $rowClass; ?>">
                 <td><?php echo $res['id'] ?></td>
                 <td><?php echo $res['Name'] ?></td>
                 <td><?php echo $res['National'] ?></td>
@@ -103,7 +159,7 @@ include '../config.php';
                         }
                         $badgeHtml = "<span class='badge bg-warning text-dark position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>!</span>";
                         if ($badgeCount > 0) {
-                            $badgeHtml = "<span class='badge bg-warning text-dark position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>$badgeCount</span>";
+                            $badgeHtml = "<span class='badge bg-danger text-white position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>$badgeCount</span>";
                         }
                         echo "<button class='btn btn-success position-relative' onclick='setupInfoBtn(".$res['id'].")'>Setup Info $badgeHtml</button>";
                     }else if($res['stat'] == "2")
@@ -117,7 +173,8 @@ include '../config.php';
                 ?></td>
                 
                 <td class="action">
-                    <button class="btn btn-primary" onclick="editOpenmodelArg(editbookingmodel,<?php echo $res['id']; ?>) ">Edit</button>
+                    <button type="button" class="btn btn-primary" onclick="editOpenmodelArg(editbookingmodel, <?php echo $res['id']; ?>)">Edit</button>
+
                 </td>
                 <td class="action">
                     <?php
@@ -130,6 +187,7 @@ include '../config.php';
                 </td>
             </tr>
             <?php
+                $rowIndex++;
             }
             ?>
             </tbody>
