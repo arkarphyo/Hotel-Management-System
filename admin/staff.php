@@ -12,7 +12,7 @@ include '../config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlueBird - Admin</title>
     <!-- fontowesome -->
-    <link rel="stylesheet" href="../assets/font-awesome/css/all.min.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/css/all.css"/>
     <!-- boot -->
     <link href="../dist/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="../dist/bootstrap/js/bootstrap.bundle.min.js"></script>

@@ -1,50 +1,30 @@
-<div class="reservationinfo">
-    <h4 style="font-size: 16px;">Reservation information</h4>
-    <!-- Grid of selectable room icons (multi-selectable) -->
-    <div class="room-grid">
-        <?php
-        // Get booking_id from GET or POST, fallback to 0 if not set
-        
-        
-        $sql = "SELECT * FROM room";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                if($row['status'] == 1){
-                     $booksql = "SELECT * FROM roombook WHERE JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
-                    $booked_result = mysqli_query($conn, $booksql);
-                    if (mysqli_num_rows($booked_result) > 1) {
-                        // Each room label (disabled)
-                        $row_booked = mysqli_fetch_assoc($booked_result);
-                        // Extract only numbers from RoomNos and display them
-                        $roomNumbers = preg_replace('/\D+/', '', $row_booked['RoomNos']);
-                        echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;opacity:0.5;pointer-events:none;">';
-                        echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" disabled>';
-                        echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
-                        echo '<i class="fa fa-bed"></i><br>';
-                        echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
-                        echo '</div>';
-                        echo '</label>';
-                    }
-                }else{
-                    // Each room label
-                    echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;">';
-                    echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;">';
-                    echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
-                    echo '<i class="fa fa-bed"></i><br>';
-                    echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
-                    echo '</div>';
-                    echo '</label>';
-                }
-                
-            }
-        } else {
-            echo '<div>လွတ်လတ် နေသော အခန်းများမရှိပါ</div>';
+
+<div class="reservationinfo" action="">
+    <input type="hidden" name="booking_id" value="122">
+    <!-- Output result -->
+    <div id="result"></div>
+    <?php
+        if (isset($_GET['ID'])) {
+            $booking_id = $_GET['ID'];
+
+            // Do something with the ID (e.g., query DB)
+            echo "Booking ID from URL: " . htmlspecialchars($booking_id);
+        }else{
+            $booking_id = '0'; // Default value if not set
+            echo "No booking ID provided in URL.";
         }
-        ?>
+    ?>
+    
+    <h4 style="font-size: 16px;">Reservation information <?php echo $booking_id; ?></h4>
+
+
+    <!-- Grid of selectable room icons (multi-selectable) -->
+    <div class="edit-room-grid">
+        
+        
     </div>
     <script>
-    document.querySelectorAll(".room-icon-label").forEach(function(label) {
+    document.querySelectorAll(".edit-room-icon-label").forEach(function(label) {
         label.addEventListener("contextmenu", function(e) {
             e.preventDefault();
             if (document.getElementById("bedTypeDialog")) return;
@@ -136,31 +116,20 @@
     });
     </script>
     <script>
-    document.querySelectorAll('.room-icon-label input[type="checkbox"]').forEach(function(checkbox) {
-        
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                checkbox.nextElementSibling.style.borderColor = '#007bff';
-                checkbox.nextElementSibling.style.background = '#e6f0ff';
-            } else {
-                checkbox.nextElementSibling.style.borderColor = '#b0c4de';
-                checkbox.nextElementSibling.style.background = '#f8fafc';
-            }
-        });
-    });
+    
     </script>
     <style>
-    .room-grid {
+    .edit-room-grid {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
         margin-bottom: 15px;
     }
-    .room-icon-label {
+    .edit-room-icon-label {
         cursor: pointer;
     }
-    .room-icon {
+    .edit-room-icon {
         border: 2px solid #b0c4de;
         border-radius: 8px;
         padding: 10px 15px;
@@ -169,11 +138,11 @@
         transition: border-color 0.2s, background 0.2s;
         min-width: 70px;
     }
-    .room-icon-label input[type="radio"]:checked + .room-icon {
+    .edit-room-icon-label input[type="radio"]:checked + .room-icon {
         border-color: #007bff;
         background: #e6f0ff;
     }
-    .room-icon i.fa-bed {
+    .edit-room-icon i.fa-bed {
         font-size: 24px;
         color: #007bff;
     }
@@ -196,7 +165,7 @@
             min-width: 0;
             padding: 10px;
         }
-        .room-grid {
+        .edit-room-grid {
             gap: 6px;
         }
     }
@@ -219,12 +188,12 @@
         .setbookingform .middle .reservationinfo {
             padding: 6px;
         }
-        .room-icon {
+        .edit-room-icon {
             min-width: 55px;
             padding: 7px 5px;
             font-size: 13px;
         }
-        .room-icon i.fa-bed {
+        .edit-room-icon i.fa-bed {
             font-size: 18px;
         }
         .datesection span {
@@ -242,31 +211,20 @@
     }
     </style>
     <script>
-    document.querySelectorAll('.room-icon-label input[type="radio"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            document.querySelectorAll('.room-icon').forEach(function(icon) {
-                icon.style.borderColor = '#b0c4de';
-                icon.style.background = '#f8fafc';
-            });
-            if (radio.checked) {
-                radio.nextElementSibling.style.borderColor = '#007bff';
-                radio.nextElementSibling.style.background = '#e6f0ff';
-            }
-        });
-    });
+    
     </script>
     <!-- Show selected room count in Burmese -->
-    <div id="selected-room-count" style="margin-top:10px;font-weight:bold;color:#007bff;"></div>
+    <div id="edit-selected-room-count" style="margin-top:10px;font-weight:bold;color:#007bff;"></div>
     <script>
     function toBurmeseNumber(n) {
         const burmeseDigits = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
         return String(n).split('').map(d => burmeseDigits[d] || d).join('');
     }
     function updateSelectedRoomCount() {
-        const checked = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
-        const countDiv = document.getElementById('selected-room-count');
+        const checked = document.querySelectorAll('.edit-room-icon-label input[type="checkbox"]:checked').length;
+        const countDiv = document.getElementById('edit-selected-room-count');
         if (checked > 0) {
-            let selectedRooms = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+            let selectedRooms = Array.from(document.querySelectorAll('.edit-room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
             countDiv.textContent = 'ရွေးထားသော အခန်းအရေအတွက် - ' + toBurmeseNumber(checked) + ' ခန်း (' + selectedRooms.join(', ') + ')';
 
             countDiv.style.color = 'green';
@@ -275,7 +233,7 @@
             countDiv.style.color = 'red';
         }
     }
-    document.querySelectorAll('.room-icon-label input[type="checkbox"]').forEach(function(cb) {
+    document.querySelectorAll('.edit-room-icon-label input[type="checkbox"]').forEach(function(cb) {
         cb.addEventListener('change', updateSelectedRoomCount);
     });
     updateSelectedRoomCount();

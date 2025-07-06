@@ -245,22 +245,41 @@ function setBookingBtn() {
 }
 
 function editBookingBtn(){
-    const bookingId = document.getElementById('editBookingId').value;
-    const Name = document.getElementById('editNameInput').value;
-    const National = document.getElementById('editNationalInput').value;
-    const Phone = document.getElementById('editPhoneInput').value;
-    //const roomTypeValue = document.getElementById('roomTypeSelect').value;
-    const RoomType = "Romm Type";
-    //const roomNosValue = document.getElementById('roomNosInput').value;
-    const RoomNosArray = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
-    // Convert RoomNos array to JSON string
-    const RoomNos = JSON.stringify(RoomNosArray);
-    //const bedValue = document.getElementById('bedTypeSelect').value;
-    const Bed = "Bed Type";
-    const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
-    const Meal = document.getElementById('editMealInput').checked ? 1 : 0;
-    const cin = document.getElementById('editCinInput').value;
-    const cout = document.getElementById('editCoutInput').value;
+    // const bookingId = document.getElementById('editBookingId').value;
+    // const Name = document.getElementById('editNameInput').value;
+    // const National = document.getElementById('editNationalInput').value;
+    // const Phone = document.getElementById('editPhoneInput').value;
+    // //const roomTypeValue = document.getElementById('roomTypeSelect').value;
+    // const RoomType = "Romm Type";
+    // //const roomNosValue = document.getElementById('roomNosInput').value;
+    // const RoomNosArray = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+    // // Convert RoomNos array to JSON string
+    // const RoomNos = JSON.stringify(RoomNosArray);
+    // //const bedValue = document.getElementById('bedTypeSelect').value;
+    // const Bed = "Bed Type";
+    // const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
+    // const Meal = document.getElementById('editMealInput').checked ? 1 : 0;
+    // const cin = document.getElementById('editCinInput').value;
+    // const cout = document.getElementById('editCoutInput').value;
+
+    swal.fire({
+        title: 'Edit Booking',
+        text: "Are you sure you want to edit this booking?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, edit it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            //location.reload();
+            // Check for required fields before sending request
+        }
+    });
+            
+                
+                
+                
 
    
    
@@ -483,11 +502,11 @@ function validateCheckinInfoForm() {
 }
 
 // Example usage: attach to form submit
-const checkinForm = document.getElementById('checkinInfoFrom');
-if (checkinForm) {
-    checkinForm.addEventListener('submit', function(e) {
-        if (!validateCheckinInfoForm()) {
-            e.preventDefault();
-        }
-    });
-}
+// const checkinForm = document.getElementById('checkinInfoFrom');
+// if (checkinForm) {
+//     checkinForm.addEventListener('submit', function(e) {
+//         if (!validateCheckinInfoForm()) {
+//             e.preventDefault();
+//         }
+//     });
+// }

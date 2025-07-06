@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Yangon'); // Set your timezone (example: Myanmar)
 session_start();
 include '../config.php';
 ?>
@@ -36,7 +37,7 @@ include '../config.php';
                 type="date" 
                 id="from_date" 
                 name="from_date" 
-                value="<?php echo isset($_GET['from_date']) ? htmlspecialchars($_GET['from_date']) : ''; ?>" 
+                value="<?php echo isset($_GET['from_date']) ? htmlspecialchars($_GET['from_date']) : htmlspecialchars((date('Y-m-d', strtotime('-7 days')))); ?>" 
                 style="
                     height:30px;
                     border-radius: 12px;
@@ -50,7 +51,7 @@ include '../config.php';
                 "
             >
             <label for="to_date" class="mb-0"  style="color: #fff;">To:</label>
-            <input type="date" id="to_date" name="to_date" value="<?php echo isset($_GET['to_date']) ? htmlspecialchars($_GET['to_date']) : ''; ?>" style="
+            <input type="date" id="to_date" name="to_date" value="<?php echo isset($_GET['to_date']) ? htmlspecialchars($_GET['to_date']) :  htmlspecialchars(date('Y-m-d')); ?>" style="
                     height:30px;
                     border-radius: 12px;
                     border: none;
@@ -70,9 +71,15 @@ include '../config.php';
         if (!empty($_GET['from_date'])) {
             $from = mysqli_real_escape_string($conn, $_GET['from_date']);
             $where[] = "cin >= '$from'";
+        }else{
+            $from = mysqli_real_escape_string($conn, date('Y-m-d', strtotime('-7 days')));
+            $where[] = "cin >= '$from'";
         }
         if (!empty($_GET['to_date'])) {
             $to = mysqli_real_escape_string($conn, $_GET['to_date']);
+            $where[] = "cin <= '$to'";
+        }else{
+            $to = mysqli_real_escape_string($conn, date('Y-m-d'));
             $where[] = "cin <= '$to'";
         }
         if ($where) {
