@@ -6,7 +6,13 @@
                             // Get booking_id from GET or POST, fallback to 0 if not set
                             
                             
-                            $sql = "SELECT * FROM room";
+                            $sql = "SELECT room.*,
+                                    roomtype.name AS roomtype_name,
+                                    bedtype.name AS extrabed_name
+                                    FROM 
+                                        room 
+                                    LEFT JOIN roomtype ON room.type = roomtype.id 
+                                    LEFT JOIN bedtype ON room.extra_bed = bedtype.id ORDER BY room.room_number ASC";
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -22,7 +28,7 @@
                                             echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" disabled>';
                                             echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
                                             echo '<i class="fa fa-bed" style="color:green;"></i><br>';
-                                            echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
+                                            echo $row['room_number'].'<br><small>'.$row['roomtype_name'].'</small>';
                                             echo '</div>';
                                             echo '</label>';
                                         }
@@ -38,7 +44,7 @@
                                             echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" disabled>';
                                             echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
                                             echo '<i class="fa fa-bed" style="color:#dc3545;"></i><br>';
-                                            echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
+                                            echo $row['room_number'].'<br><small>'.$row['roomtype_name'].'</small>';
                                             echo '</div>';
                                             echo '</label>';
                                         }else{
@@ -47,7 +53,7 @@
                                             echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;">';
                                             echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
                                             echo '<i class="fa fa-bed"></i><br>';
-                                            echo $row['room_number'].'<br><small>'.$row['type'].'</small>';
+                                            echo $row['room_number'].'<br><small>'.$row['roomtype_name'].'</small>';
                                             echo '</div>';
                                             echo '</label>';
                                         }

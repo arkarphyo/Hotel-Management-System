@@ -1,29 +1,18 @@
 
 <div class="reservationinfo" action="">
-    <input type="hidden" name="booking_id" value="122">
-    <!-- Output result -->
-    <div id="result"></div>
-    <?php
-        if (isset($_GET['ID'])) {
-            $booking_id = $_GET['ID'];
-
-            // Do something with the ID (e.g., query DB)
-            echo "Booking ID from URL: " . htmlspecialchars($booking_id);
-        }else{
-            $booking_id = '0'; // Default value if not set
-            echo "No booking ID provided in URL.";
-        }
-    ?>
     
-    <h4 style="font-size: 16px;">Reservation information <?php echo $booking_id; ?></h4>
+    <h4 style="font-size: 16px;">Reservation information</h4>
+
+    
+    <!-- Status Info -->
+     <div class="edit-status"></div>
 
 
     <!-- Grid of selectable room icons (multi-selectable) -->
-    <div class="edit-room-grid">
-        
-        
-    </div>
+    <div class="edit-room-grid"></div>
+
     <script>
+    //ROOM SELECTOR
     document.querySelectorAll(".edit-room-icon-label").forEach(function(label) {
         label.addEventListener("contextmenu", function(e) {
             e.preventDefault();

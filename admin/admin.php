@@ -308,9 +308,9 @@ if($usermail == true){
     <nav class="sidenav">
         <ul>
             <li class="pagebtn active"><img src="../image/icon/dashboard.png">&nbsp&nbsp&nbsp Dashboard</li>
-            <li class="pagebtn"><i class="fas fa-bed"></i>&nbsp&nbsp&nbsp Booking</li>
-            <li class="pagebtn"><i class="fas fa-wallet"></i>&nbsp&nbsp&nbsp Payment</li>            
-            <li class="pagebtn"><i class="fas fa-house"></i>&nbsp&nbsp&nbsp Rooms</li>
+            <li class="pagebtn"><i class="fas fa-bed" onclick="document.getElementById('iframe2').contentWindow.location.reload();"></i>&nbsp&nbsp&nbsp Booking</li>
+            <li class="pagebtn"><i class="fas fa-wallet" onclick="document.getElementById('iframe3').contentWindow.location.reload();"></i>&nbsp&nbsp&nbsp Payment</li>            
+            <li class="pagebtn"><i class="fas fa-house"  onclick="alert('Under Development');"></i>&nbsp&nbsp&nbsp Rooms</li>
             <li class="pagebtn"><i class="fas fa-house"></i>&nbsp&nbsp&nbsp Setup Room</li>
             <li class="pagebtn"><i class="fas fa-clipboard-list"></i>&nbsp&nbsp&nbsp Reservation</li>
             <li class="pagebtn"><i class="fas fa-concierge-bell"></i>&nbsp&nbsp&nbsp Service</li>
