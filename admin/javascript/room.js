@@ -81,7 +81,7 @@ function getRoomData() {
                             
 
 
-                        const extraBed = room.extra_bed != 0 ? ` + ${room.extrabed_name}` : '';
+                        const extraBed = room.extra_bed != 0 ? ` + ${room.extra_bed_name}` : '';
                         infoIcon.addEventListener('click', (event) => {
                             spanDiv.style.display = 'block';
                             spanDiv.style.position = 'absolute';
@@ -169,7 +169,7 @@ function getRoomData() {
                                 <i style="color: ${room.type == 1 ? '#FADEAG' : room.type == 2 ? 'blue'  : 'green'};" class='${iconClass}' ></i>
                                 <${tag} style="background-color: black; border-radius: 10px; color: #fff;">${room.room_number}</${tag}>
                                 <h3>${room.roomtype_name}</h3>
-                                <div class='mb-1'>${room.bedding} <i>${extraBed} </i></div>
+                                <div class='mb-1'>${room.bed_name} <i>${extraBed} </i></div>
                                 ${infoIcon.outerHTML}
                             </div>
                         `; 
