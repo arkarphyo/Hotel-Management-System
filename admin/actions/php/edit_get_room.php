@@ -2,7 +2,10 @@
 include '../../../config.php';
 header('Content-Type: application/json');
 
-$sql = "SELECT * FROM room";
+$sql = "SELECT room.*, roomtype.name AS roomtype_name
+            FROM room
+            LEFT JOIN roomtype 
+            ON room.type = roomtype.id;";
 $result = mysqli_query($conn, $sql);
 
 $rooms = [];
@@ -20,8 +23,9 @@ while ($row = mysqli_fetch_assoc($result)) {
      $rooms[] = [
             'booking_id' => $row['booking_id'],
             'room_number' => $row['room_number'],
-            'type' => $row['type'],
-            'booked' => $booked
+            'type' => $row['roomtype_name'],
+            'booked' => $booked,
+            'result' => $row
         ];
    
 }

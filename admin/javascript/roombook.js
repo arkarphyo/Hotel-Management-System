@@ -9,7 +9,15 @@ closemodel = (modelpanel) => {
 editOpenmodelArg = (modelpanel, bookingId) => {
     modelpanel.style.display = "flex";
     // Fetch booking data
-    fetch('actions/php/get_booking_info.php?id=' + bookingId)
+    fetch('actions/php/get_booking_info.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: bookingId
+        })
+    })
         .then(response => response.json())
         .then(data => {
              if (bookingId) {
@@ -29,6 +37,89 @@ editOpenmodelArg = (modelpanel, bookingId) => {
             document.getElementById('editCoutInput').value = data.cout;
             document.getElementById('editMealInput').checked = data.Breakfast == 1 ? true : false;
 
+            
+            const status_container = document.querySelector('.edit-status');
+            status_container.innerHTML = '';
+            const status_icon = document.createElement('i');
+            const status_label = document.createElement('i');
+            const edit_icon = document.createElement('i');
+            
+            status_label.className = 'edit_booking_status_label';
+            status_label.textContent = `${data.stat == 1 ? 'Confirmed' : data.stat == 2 ? 'Cancelled' : 'Pending'}`;
+            status_label.style.fontSize = '12px';
+            status_icon.className = 'fa fa-circle';
+            status_icon.style.color = data.stat == 1 ? '#28a745' : data.stat == 2 ? '#dc3545' : '#ffc107';
+            status_icon.style.marginLeft = '5px';
+            status_icon.style.fontSize = '12px';
+            status_icon.style.cursor = 'pointer';
+            edit_icon.className = 'fa fa-pencil';
+            edit_icon.style.color = 'blue';
+            edit_icon.style.fontSize = '12px';
+            edit_icon.style.cursor = 'pointer';
+            edit_icon.style.marginLeft = '5px';
+            edit_icon.onclick = () => {
+                edit_icon.onclick = () => {
+                    // Toggle between label and dropdown
+                    const edit_status_dropdown = document.querySelector('.edit-status-dropdown');
+                    if (edit_status_dropdown) {
+                        // If dropdown exists, revert to label view
+                        status_container.innerHTML = '';
+                        status_container.appendChild(status_label);
+                        status_container.appendChild(status_icon);
+                        status_container.appendChild(edit_icon);
+                    } else {
+                        // If dropdown does not exist, create it
+                        const edit_status_dropdown = document.createElement('select');
+                        edit_status_dropdown.className = 'edit-status-dropdown';
+                        status_container.innerHTML = ''; // Clear previous content
+                        status_container.appendChild(edit_status_dropdown);
+                        status_container.appendChild(status_icon);
+                        status_container.appendChild(edit_icon);
+                        // Populate dropdown with options
+                        edit_status_dropdown.innerHTML = `
+                            <option value="1" ${data.stat == 1 ? 'selected' : ''}>Confirmed</option>
+                            <option value="2" ${data.stat == 2 ? 'selected' : ''
+                            }>Cancelled</option>
+                            <option value="3" ${data.stat == 0 ? 'selected' : ''}>Pending</option>
+                        `;
+                        edit_status_dropdown.defaultValue = data.stat; // Set default value to current status
+                        // Style the dropdown
+                        edit_status_dropdown.style.fontSize = '12px';
+                        edit_status_dropdown.style.marginLeft = '5px';
+                        edit_status_dropdown.style.padding = '2px 5px';
+                        edit_status_dropdown.style.border = '1px solid #ccc';
+                        edit_status_dropdown.style.borderRadius = '4px';
+                        edit_status_dropdown.style.cursor = 'pointer';
+                        edit_status_dropdown.style.width = '150px';
+                        edit_status_dropdown.style.backgroundColor = '#f8f9fa';
+                        edit_status_dropdown.style.color = '#495057';
+                        edit_status_dropdown.style.transition = 'background-color 0.3s, color 0.3s';
+                        edit_status_dropdown.onmouseover = function() {
+                            this.style.backgroundColor = '#e9ecef';
+                            this.style.color = '#212529';
+                        };
+                        edit_status_dropdown.onmouseout = function() {
+                            this.style.backgroundColor = '#f8f9fa';
+                            this.style.color = '#495057';
+                        };
+                        // Handle status change
+                        edit_status_dropdown.onchange = function() {
+                            const newStatus = this.value;
+                            status_label.textContent = `${newStatus == 1 ? 'Confirmed' : newStatus == 2 ? 'Cancelled' : 'Pending'}`;
+                            status_icon.style.color = newStatus == 1 ? '#28a745' : newStatus == 2 ? '#dc3545' : '#ffc107';
+                            
+                            // Revert back to label view
+                            status_container.innerHTML = '';
+                            status_container.appendChild(status_label);
+                            status_container.appendChild(status_icon);
+                            status_container.appendChild(edit_icon);
+                        };
+                    }
+                }
+            };
+            status_container.appendChild(status_label);
+            status_container.appendChild(status_icon);
+            status_container.appendChild(edit_icon);
 
             
             
@@ -44,6 +135,7 @@ async function editLoadRooms(){
     const rooms = await response.json();
     const container = document.querySelector('.edit-room-grid');
     container.innerHTML = ''; // Clear existing content
+    
 
     
 

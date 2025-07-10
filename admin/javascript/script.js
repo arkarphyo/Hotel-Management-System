@@ -12,10 +12,12 @@ var frameActive = function (manual) {
 
   btns[manual].classList.add('active');
   frames[manual].classList.add('active');
+  frames[manual].contentWindow.location.reload();
 };
 
 btns.forEach((btn, i) => {
   btn.addEventListener('click', () => {
+    
     frameActive(i);
   });
 });

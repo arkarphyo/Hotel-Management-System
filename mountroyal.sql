@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 28, 2025 at 07:17 PM
+-- Generation Time: Jul 09, 2025 at 05:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,17 +18,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Mount Royal`
--- User: `bluebird_user`
--- Password:   `password`
+-- Database: `mountroyal`
 --
-DROP DATABASE IF EXISTS mountroyal;
-CREATE DATABASE IF NOT EXISTS mountroyal;
 
-DROP USER IF EXISTS'mountroyal'@'%';
-CREATE USER IF NOT EXISTS 'mountroyal'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON bluebirdhotel.* TO 'mountroyal'@'%';
-USE mountroyal;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bedtype`
+--
+
+CREATE TABLE `bedtype` (
+  `id` int(11) NOT NULL,
+  `name` varchar(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bedtype`
+--
+
+INSERT INTO `bedtype` (`id`, `name`, `created_at`) VALUES
+(1, 'Double', '2025-07-09 05:52:25'),
+(2, 'Single', '2025-07-09 05:52:25'),
+(3, 'Extra', '2025-07-09 05:53:20'),
+(4, 'Triple', '2025-07-09 05:53:20');
 
 -- --------------------------------------------------------
 
@@ -38,6 +51,7 @@ USE mountroyal;
 
 CREATE TABLE `checkn_info` (
   `id` int(11) NOT NULL,
+  `booking_id` int(100) NOT NULL,
   `name` varchar(10) NOT NULL,
   `fat_name` varchar(10) NOT NULL,
   `age` int(3) NOT NULL,
@@ -49,6 +63,21 @@ CREATE TABLE `checkn_info` (
   `address` text NOT NULL,
   `remark` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `checkn_info`
+--
+
+INSERT INTO `checkn_info` (`id`, `booking_id`, `name`, `fat_name`, `age`, `gender`, `nrc_no`, `work`, `in_date`, `out_date`, `address`, `remark`) VALUES
+(1, 115, 'U Kg Kg', 'fghfgh', 54, 0, 'sdfg', 'sdfg', '2025-06-29', '2025-06-30', 'sdfg', 'sdfg'),
+(2, 115, 'fsdf', 'dfg', 43, 0, 'dfg', 'sdfg', '2025-06-29', '2025-06-30', 'sdfg', 'sdfg'),
+(3, 115, 'U Kg Kg', 'sdfsdf', 32, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdf', 'sdf'),
+(4, 115, 'U Kg Kg', 'sdf', 43, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdfsdf', 'sdfa'),
+(5, 117, 'U Kg Kg', 'asdf', 34, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdf', 'asdf'),
+(6, 115, 'asdasd', 'aSDASD', 6, 0, 'ASDASD', 'AsdaSD', '2025-06-29', '2025-06-30', 'ASDasd', 'ASDAd'),
+(7, 118, 'ASDAs', 'ASD', 23, 0, 'adaD', 'asdas', '2025-06-29', '2025-07-05', 'ADS', 'asdaSD'),
+(8, 119, 'dfgdfg', 'sdfgdfg', 45, 0, 'fdgsdfg', 'sdfgdfg', '2025-07-07', '2025-07-16', 'dfgdfg', 'sdfg'),
+(9, 119, 'sdfg', 'sdfg', 45, 0, 'sdfg', 'sdfg', '2025-07-07', '2025-07-16', 'sdfg', 'sdfgdf');
 
 -- --------------------------------------------------------
 
@@ -119,31 +148,33 @@ INSERT INTO `payment` (`id`, `Name`, `Email`, `RoomType`, `Bed`, `NoofRoom`, `ci
 
 CREATE TABLE `room` (
   `id` int(30) NOT NULL,
+  `booking_id` int(11) NOT NULL,
   `room_number` int(11) DEFAULT NULL,
   `type` varchar(50) NOT NULL,
   `bedding` varchar(50) NOT NULL,
-  `status` int(3) NOT NULL DEFAULT 0
+  `capacity` int(11) NOT NULL,
+  `extra_bed` int(11) NOT NULL DEFAULT 0,
+  `status` int(3) NOT NULL DEFAULT 0,
+  `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`id`, `room_number`, `type`, `bedding`, `status`) VALUES
-(51, 101, 'Guest House', 'Single', 0),
-(52, 102, 'Guest House', 'Double', 0),
-(53, 103, 'Single Room', 'Single', 0),
-(54, 104, 'Family Room', 'Triple', 0),
-(55, 201, 'Guest House', 'Triple', 0),
-(57, 202, 'Normal', 'Double Bed', 0),
-(58, 203, 'Normal', 'Duble Bed', 0),
-(59, 204, 'Normal', 'Double Bed', 0),
-(60, 205, 'Normal', 'Double', 0),
-(61, 206, 'Normal', 'Double Bed', 0),
-(62, 301, 'Family Room', 'Double Bed, Single Bed', 0),
-(63, 302, 'Honeymoon Room', 'Double Bed', 0),
-(64, 401, 'Normal', '2 Single Bed', 0),
-(65, 402, 'Normal', 'Double Bed', 0);
+INSERT INTO `room` (`id`, `booking_id`, `room_number`, `type`, `bedding`, `capacity`, `extra_bed`, `status`, `price`) VALUES
+(51, 116, 101, '1', '1', 0, 0, 1, 0),
+(52, 116, 102, '3', '1', 0, 1, 1, 0),
+(53, 118, 103, '2', '1', 0, 0, 1, 0),
+(54, 118, 104, '4', '1', 0, 0, 1, 0),
+(63, 119, 302, '3', '1', 0, 0, 1, 0),
+(66, 0, 301, '1', '1', 2, 0, 0, 301),
+(69, 0, 401, '1', '1', 2, 0, 0, 50000),
+(70, 0, 201, '2', '1', 2, 0, 0, 50000),
+(71, 0, 202, '3', '1', 0, 0, 0, 50000),
+(72, 0, 203, '2', '1', 0, 0, 0, 50000),
+(73, 0, 204, '2', '1', 0, 0, 0, 50000),
+(74, 0, 402, '2', '1', 0, 0, 0, 50000);
 
 -- --------------------------------------------------------
 
@@ -201,10 +232,20 @@ INSERT INTO `roombook` (`id`, `Name`, `National`, `Phone`, `RoomNos`, `RoomType`
 (103, 'Mg Mg', 'Myanmar', '234234234', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
 (104, 'Kyaw', 'Algeria', '0934737434', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
 (105, 'Kyaw', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(106, 'Naing Naing', 'Algeria', '09494885454', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 0),
-(107, 'Kyaw', 'Albania', '09750074567', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 0),
-(108, 'Aung Aun', 'American Samoa', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 0),
-(109, 'Aung Aung', 'Afghanistan', '09494885454', '[\"401\",\"402\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 0);
+(106, 'Naing Naing', 'Algeria', '09494885454', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
+(107, 'Kyaw', 'Albania', '09750074567', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
+(108, 'Aung Aun', 'American Samoa', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
+(109, 'Aung Aung', 'Afghanistan', '09494885454', '[\"401\",\"402\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
+(110, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
+(111, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
+(112, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-29', 0, 2),
+(113, 'KOAKRA', 'Myanmar', '09432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
+(114, 'KOAKRA', 'Myanmar', '09432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
+(115, 'KOAKRA', 'Myanmar', '09432342', '[\"202\",\"203\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 1),
+(116, 'sadfsdf', 'Myanmar', '423423423', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 1),
+(117, '34234', 'Myanmar', '2341234', '[\"302\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-29', '2025-06-30', 1, 2),
+(118, 'sadfsdf', 'Myanmar', '9432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-07-05', 6, 1),
+(119, 'WRW', 'Myanmar', '9432342', '[\"302\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-07-07', '2025-07-16', 9, 2);
 
 -- --------------------------------------------------------
 
@@ -215,9 +256,18 @@ INSERT INTO `roombook` (`id`, `Name`, `National`, `Phone`, `RoomNos`, `RoomType`
 CREATE TABLE `roomtype` (
   `id` int(11) NOT NULL,
   `name` varchar(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `roomtype`
+--
+
+INSERT INTO `roomtype` (`id`, `name`, `created`) VALUES
+(1, 'Superior Ro', '2025-07-09 05:30:47'),
+(2, 'Deluxe Room', '2025-07-09 05:30:47'),
+(3, 'Guest House', '2025-07-09 05:30:58'),
+(4, 'Single Room', '2025-07-09 05:30:58');
 
 -- --------------------------------------------------------
 
@@ -261,6 +311,12 @@ INSERT INTO `staff` (`id`, `name`, `work`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `bedtype`
+--
+ALTER TABLE `bedtype`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `checkn_info`
@@ -321,10 +377,16 @@ ALTER TABLE `staff`
 --
 
 --
+-- AUTO_INCREMENT for table `bedtype`
+--
+ALTER TABLE `bedtype`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `checkn_info`
 --
 ALTER TABLE `checkn_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `emp_login`
@@ -342,19 +404,19 @@ ALTER TABLE `meal`
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `roombook`
 --
 ALTER TABLE `roombook`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `roomtype`
 --
 ALTER TABLE `roomtype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `signup`

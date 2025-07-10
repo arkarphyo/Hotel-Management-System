@@ -470,6 +470,83 @@ function setupInfoBtn(id) {
     
 }
 
+function editBookingSaveBtn() {
+    const bookingId = document.getElementById('editBookingId').value;
+    const Name = document.getElementById('editNameInput').value;
+    const National = document.getElementById('editNationalInput').value;
+    const Phone = document.getElementById('editPhoneInput').value;
+    //const roomTypeValue = document.getElementById('roomTypeSelect').value;
+    const RoomType = "Romm Type";
+    //const roomNosValue = document.getElementById('roomNosInput').value;
+    const RoomNosArray = Array.from(document.querySelectorAll('.edit-room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
+    // Convert RoomNos array to JSON string
+    const RoomNos = JSON.stringify(RoomNosArray);
+    //const bedValue = document.getElementById('bedTypeSelect').value;
+
+    const Bed = "Bed Type";
+    const NoofRoom = document.querySelectorAll('.edit-room-icon-label input[type="checkbox"]:checked').length;
+    const Meal = document.getElementById('editMealInput').checked ? 1 : 0;
+    const cin = document.getElementById('editCinInput').value;
+    const cout = document.getElementById('editCoutInput').value;
+    const stat = document.querySelector('.edit_booking_status_label').textContent.trim(); // Get the status from the label, default to 'Pending'
+    const saveData = JSON.stringify({
+        bookingId: bookingId,
+        name: Name,
+        national: National,
+        phone: Phone,
+        room_type: RoomType,
+        room_nos: RoomNos,
+        bed: Bed,
+        noof_room: NoofRoom,
+        meal: Meal,
+        cin: cin,
+        cout: cout,
+        stat: stat == 'Confirmed' ? 1 : stat == 'Cancelled' ? 2 : 0
+        
+    });
+    
+    fetch('../admin/actions/php/booking_edit.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: saveData
+    }).then(response => {
+        if (!response.ok) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update booking. Please try again later.',
+                confirmButtonText: 'OK'
+            });
+            throw new Error('Network response was not ok');
+        }else{
+            return response.json();
+        }
+    }).then(data => {
+        // Handle the response data
+        console.log('Booking edit response:', data);
+        if(data.status === 'success'){
+            Swal.fire({
+                icon: 'success',
+                title: 'Booking Updated',
+                text: 'The booking has been updated successfully!',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                location.reload(); // Reload the page to reflect changes
+            });
+        }}).catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Failed to update booking. ${error.message}`,
+            confirmButtonText: 'OK'
+        });
+    });
+    // Check if the URL exists before sending the request
+}
+
 // Validate check-in info form
 function validateCheckinInfoForm() {
     const form = document.getElementById('checkinInfoFrom');
