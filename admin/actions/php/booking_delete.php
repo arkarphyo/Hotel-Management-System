@@ -14,7 +14,7 @@ if ($id === null) {
     exit;
 }else{}
 if ($id > 0) {
-    $cancelsql = "UPDATE roombook SET stat = 2 WHERE id = $id";   
+    $cancelsql = "UPDATE roombook SET stat = 0 WHERE id = $id";   
     $result = mysqli_query($conn, $cancelsql);
     if ($result) {
         $getRoomNosSql = "SELECT RoomNos FROM roombook WHERE id = $id";

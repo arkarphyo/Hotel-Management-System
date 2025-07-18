@@ -163,85 +163,83 @@ function setBookingBtn() {
         })
         return;
     }
-    alert(`Booking Details:\nName: ${Name}\nNationality: ${National}\nPhone: ${Phone}\nRoom Type: ${RoomType}\nRoom Numbers: ${RoomNos}\nBed Type: ${Bed}\nNumber of Rooms: ${NoofRoom}\nMeal: ${Meal ? 'Yes' : 'No'}\nCheck-in Date: ${cin}\nCheck-out Date: ${cout}`);
+    //alert(`Booking Details:\nName: ${Name}\nNationality: ${National}\nPhone: ${Phone}\nRoom Type: ${RoomType}\nRoom Numbers: ${RoomNos}\nBed Type: ${Bed}\nNumber of Rooms: ${NoofRoom}\nMeal: ${Meal ? 'Yes' : 'No'}\nCheck-in Date: ${cin}\nCheck-out Date: ${cout}`);
     // Check if the URL exists before sending the request
-    try {
-        fetch('../admin/actions/php/booking_set.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                Name: Name,
-                National: National,
-                Phone: Phone,
-                RoomType: RoomType,
-                RoomNos: RoomNos,
-                Bed: Bed,
-                NoofRoom: NoofRoom,
-                Meal: Meal,
-                cin: cin,
-                cout: cout
-            })
+
+    fetch('../admin/actions/php/booking_set.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Name: Name,
+            National: National,
+            Phone: Phone,
+            RoomType: RoomType,
+            RoomNos: RoomNos,
+            Bed: Bed,
+            NoofRoom: NoofRoom,
+            Meal: Meal,
+            cin: cin,
+            cout: cout
         })
-        .then(response => {
-            if (!response.ok) {
-                // Try to get error message from response
-                return response.text().then(text => {
-                    throw new Error(`Network response was not ok. Status: ${response.status}. Message: ${text}`);
-                });
-            }
-            // Check if response is JSON
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.indexOf('application/json') !== -1) {
-                return response.json();
-            } else {
-                throw new Error('Invalid response format (not JSON)');
-            }
-        })
-        .then(data => {
-            // Log the response for debugging
-            try {
-                console.log('Booking set response:', data);
-                document.getElementById('setbookingmodel').style.display = 'none';
-                Swal.fire({
-                    icon: data.status === 'success' ? 'success' : 'error',
-                    title: data.status === 'success' ? 'Booking Successful' : 'Error',
-                    text: data.message || (data.status === 'success' ? 'The booking has been set successfully!' : 'Failed to set booking.'),
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
-            } catch (e) {
-                console.error('Error handling booking set response:', e);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while processing the booking response.',
-                    confirmButtonText: 'OK'
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Try to get error message from response
+            return response.text().then(text => {
+                throw new Error(`Network response was not ok. Status: ${response.status}. Message: ${text}`);
+            });
+        }
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+            return response.json();
+        } else {
+            throw new Error('Invalid response format (not JSON)');
+        }
+    })
+    .then(data => {
+        // Log the response for debugging
+        try {
+            console.log('Booking set response:', data);
+            document.getElementById('setbookingmodel').style.display = 'none';
+            Swal.fire({
+                icon: data.status === 'success' ? 'success' : 'error',
+                title: data.status === 'success' ? 'Booking Successful' : 'Error',
+                text: data.message || (data.status === 'success' ? 'The booking has been set successfully!' : 'Failed to set booking.'),
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+        } catch (e) {
+            console.error('Error handling booking set response:', e);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: error.message || 'Failed to set booking.',
+                text: 'An error occurred while processing the booking response.',
                 confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                }
             });
-        });
-    } catch (error) {
-        console.error('Unexpected Error:', error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: error.message || 'An unexpected error occurred.',
+            text: error.message || 'Failed to set booking.',
             confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            }
         });
-    }
+    });
+    
 }
 
 function editBookingBtn(){
@@ -534,6 +532,16 @@ function editBookingSaveBtn() {
                 confirmButtonText: 'OK'
             }).then(() => {
                 location.reload(); // Reload the page to reflect changes
+            });
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Failed to update booking. ${data.message}`,
+                confirmButtonText: 'OK'
+            }).then((confirm) => {
+                if (confirm) {
+                }
             });
         }}).catch(error => {
         console.error('Error:', error);

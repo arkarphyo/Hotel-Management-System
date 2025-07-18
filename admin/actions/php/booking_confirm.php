@@ -12,7 +12,7 @@ if ($id === null) {
     exit;
 }
 
-$roombook_sql = "UPDATE roombook SET stat = 1 WHERE id = ?";
+$roombook_sql = "UPDATE roombook SET stat = 2 WHERE id = ?";
 
 $stmt = $conn->prepare($roombook_sql);
 

@@ -154,7 +154,7 @@ include '../config.php';
                 <td><?php echo $res['cout'] ?></td>
                 <td><?php echo $res['nodays'] ?></td>
                 <td><?php 
-                    if($res['stat'] == "1")
+                    if($res['stat'] == "2")
                     {
                         // Fetch count from checkn_info for this booking
                         $id = $res['id'];
@@ -169,11 +169,11 @@ include '../config.php';
                             $badgeHtml = "<span class='badge bg-danger text-white position-absolute top-0 start-100 translate-middle rounded-pill' style='font-size:0.75em;'>$badgeCount</span>";
                         }
                         echo "<button class='btn btn-success position-relative' onclick='setupInfoBtn(".$res['id'].")'>Setup Info $badgeHtml</button>";
-                    }else if($res['stat'] == "2")
+                    }else if($res['stat'] == "0")
                     {
                           echo "<span style='color: red; text-shadow: 1px 1px 2px #dc3545;'>Cancelled</span>";
                     }   
-                    else
+                    else if($res['stat'] == "1")
                     {
                        echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button>";
                     }
@@ -185,7 +185,7 @@ include '../config.php';
                 </td>
                 <td class="action">
                     <?php
-                        if ($res['stat'] == "2") {
+                        if ($res['stat'] == "0") {
                             echo "<button class='btn btn-danger' disabled>Cancel</button>";
                         } else {
                             echo "<button class='btn btn-danger' onclick=cancelBookingBtn(".$res['id'].")>Cancel</button>";

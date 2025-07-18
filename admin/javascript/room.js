@@ -65,7 +65,7 @@ function getRoomData() {
                         // Create the staying info div
                         const stayingDiv = document.createElement('div');
                             stayingDiv.className = 'staying-info';
-                            stayingDiv.textContent = room.status == 1 ? 'Staying' : 'Not Staying';
+                            stayingDiv.textContent = room.booking_status == 2 ? 'Staying' : room.booking_status == 1 ? 'Booking' : 'Available';
                             stayingDiv.border = '1px solid #ccc';
                             stayingDiv.style.position = 'absolute';
                             stayingDiv.style.top = '0px';

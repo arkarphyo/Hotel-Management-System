@@ -18,6 +18,11 @@ $checkin = isset($input['cin']) ? $input['cin'] : '';
 $checkout = isset($input['cout']) ? $input['cout'] : '';
 $stat = isset($input['stat']) ? intval($input['stat']) : 0;
 
+if ($noof_room == 0) {
+    echo json_encode(['status' => 'error', 'message' => 'Number of rooms must be greater than 0']);
+    exit;
+}
+
 $query = "UPDATE roombook SET 
 name = ?, national = ?, phone = ?, RoomType = ?, RoomNos = ?, Bed = ?, NoOfRoom = ?, Breakfast = ?, cin = ?, cout = ?, stat = ? WHERE id = ?";
 $stmt = $conn->prepare($query);
@@ -27,13 +32,13 @@ if (!$stmt) {
 }
 
 // If the booking status is changed to cancelled, update the room status
-if ($stat == 1 || $noof_room > 0) {
+if ($stat == 1 || $stat == 0 && $noof_room > 0) {
     // Decode the room numbers from JSON
     $roomNosArray = json_decode($room_nos, true);
 
     if (is_array($roomNosArray)) {
         foreach ($roomNosArray as $roomNo) {
-            $updateRoomSql = "UPDATE room SET status = 1 WHERE room_number = ?";
+            $updateRoomSql = "UPDATE room SET status = 0 WHERE room_number = ?";
             $roomStmt = $conn->prepare($updateRoomSql);
             if ($roomStmt) {
                 $roomStmt->bind_param("s", $roomNo);
@@ -52,12 +57,12 @@ if ($stat == 1 || $noof_room > 0) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid room numbers format']);
         exit;
     }
-}else if ($stat == 2 || $stat == 0) {
+}else if ($stat == 2 || $stat == 3 && $noof_room > 0) {
     // If the booking is cancelled, update the room status
     $roomNosArray = json_decode($room_nos, true);
     if (is_array($roomNosArray)) {
         foreach ($roomNosArray as $roomNo) {
-            $updateRoomSql = "UPDATE room SET status = 0 WHERE room_number = ?";
+            $updateRoomSql = "UPDATE room SET status = 1 WHERE room_number = ?";
             $roomStmt = $conn->prepare($updateRoomSql);
             if ($roomStmt) {
                 $roomStmt->bind_param("s", $roomNo);

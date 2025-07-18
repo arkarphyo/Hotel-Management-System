@@ -60,6 +60,7 @@ function getRoomData() {
                       default:
                           return; // Skip unknown types
                   }
+                  
                 
                   
                 
@@ -79,6 +80,13 @@ function getRoomData() {
 
                 roomBox.addEventListener('click', function() {
                     createOpenModel('editRoomModal');
+                    document.getElementById('editroomid').value = room.id;
+                    document.getElementById('editroomno').value = room.room_number;
+                    document.getElementById('editroomtype').value = room.type;
+                    document.getElementById('editbedtype').value = room.bedding;
+                    document.getElementById('editroomprice').value = room.price;
+                    document.getElementById('editroomcapacity').value = room.capacity;
+                    document.getElementById('editextrabed').value = room.extra_bed;
                 });
                 // Create the info icon
                 const infoIcon = document.createElement('i');
@@ -129,6 +137,7 @@ function getRoomData() {
                             spanDiv.style.position = 'absolute';
                             spanDiv.style.top = event.clientY + 'px';
                             spanDiv.style.left = event.clientX + 'px';
+
                         });
 
                         //Check Out Button

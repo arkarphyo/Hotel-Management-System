@@ -77,10 +77,10 @@ editOpenmodelArg = (modelpanel, bookingId) => {
                         status_container.appendChild(edit_icon);
                         // Populate dropdown with options
                         edit_status_dropdown.innerHTML = `
-                            <option value="1" ${data.stat == 1 ? 'selected' : ''}>Confirmed</option>
-                            <option value="2" ${data.stat == 2 ? 'selected' : ''
-                            }>Cancelled</option>
-                            <option value="3" ${data.stat == 0 ? 'selected' : ''}>Pending</option>
+                            <option value="0" ${data.stat == 0 ? 'selected' : ''}>Cancelled</option>
+                            <option value="1" ${data.stat == 1 ? 'selected' : ''}>Booking</option>
+                            <option value="2" ${data.stat == 2 ? 'selected' : ''}>Confirmed</option>
+                            <option value="3" ${data.stat == 3 ? 'selected' : ''}>Staying</option>
                         `;
                         edit_status_dropdown.defaultValue = data.stat; // Set default value to current status
                         // Style the dropdown
@@ -105,8 +105,9 @@ editOpenmodelArg = (modelpanel, bookingId) => {
                         // Handle status change
                         edit_status_dropdown.onchange = function() {
                             const newStatus = this.value;
-                            status_label.textContent = `${newStatus == 1 ? 'Confirmed' : newStatus == 2 ? 'Cancelled' : 'Pending'}`;
-                            status_icon.style.color = newStatus == 1 ? '#28a745' : newStatus == 2 ? '#dc3545' : '#ffc107';
+                            // status_label.textContent = `${newStatus == 1 ? 'Confirmed' : newStatus == 2 ? 'Cancelled' : 'Pending'}`;
+                            status_label.textContent = `${newStatus == 0 ? 'Cancelled' : newStatus == 1 ? 'Booking' : newStatus == 2 ? 'Confirmed' : newStatus == 3 ? 'Staying' : 'Deleted'}`;
+                            status_icon.style.color = newStatus == 0 ? '#dc3545' : newStatus == 1 ? '#ffc107' : newStatus == 2 ? '#34c759' : newStatus == 3 ? '#34c759' : '#ff8c00';
                             
                             // Revert back to label view
                             status_container.innerHTML = '';
