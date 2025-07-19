@@ -19,6 +19,7 @@ $NoofRoom = $input['NoofRoom'] ?? $_POST['NoofRoom'] ?? '';
 $Meal = $input['Meal'] ?? $_POST['Meal'] ?? '';
 $cin = $input['cin'] ?? $_POST['cin'] ?? '';
 $cout = $input['cout'] ?? $_POST['cout'] ?? '';
+$stat = $input['stat'] ?? $_POST['stat'] ?? '';
 
 $data = [
     'Name' => $Name,
@@ -30,7 +31,8 @@ $data = [
     'NoofRoom' => $NoofRoom,
     'Meal' => $Meal,
     'cin' => $cin,
-    'cout' => $cout
+    'cout' => $cout,
+    'stat' => $stat
 ];
 
 // Check for missing required fields
@@ -50,7 +52,6 @@ if (!empty($missing)) {
     ]);
     exit;
 } else {
-    $sta = "NotConfirm";
     // Calculate number of days between check-in and check-out
     try {
         if (empty($cin) || empty($cout)) {
@@ -93,7 +94,6 @@ if (!empty($missing)) {
     if ($stmt) {
         // Define $Breakfast and $stat variables
         $Breakfast = $Meal;
-        $stat = $sta;
         // All fields are strings except $nodays (integer)
         // $stat is a string, $nodays is integer
         $stmt->bind_param(

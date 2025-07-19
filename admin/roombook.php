@@ -171,11 +171,13 @@ include '../config.php';
                         echo "<button class='btn btn-success position-relative' onclick='setupInfoBtn(".$res['id'].")'>Setup Info $badgeHtml</button>";
                     }else if($res['stat'] == "0")
                     {
-                          echo "<span style='color: red; text-shadow: 1px 1px 2px #dc3545;'>Cancelled</span>";
+                          echo "<span style='color: red; text-shadow: 1px 1px 2px #dc3545;'>".$res['stat']."-Cancelled</span>";
                     }   
                     else if($res['stat'] == "1")
                     {
                        echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button>";
+                    }else{
+                        echo "<button class='btn btn-success' style='animation: pulse 2s infinite;'><i class='fa-solid fa-hotel' style='animation: staying 2s infinite;'></i> Staying...</button>";
                     }
                 ?></td>
                 

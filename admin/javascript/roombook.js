@@ -45,10 +45,10 @@ editOpenmodelArg = (modelpanel, bookingId) => {
             const edit_icon = document.createElement('i');
             
             status_label.className = 'edit_booking_status_label';
-            status_label.textContent = `${data.stat == 1 ? 'Confirmed' : data.stat == 2 ? 'Cancelled' : 'Pending'}`;
+            status_label.textContent = `${data.stat == 2 ? 'Confirmed' : data.stat == 0 ? 'Cancelled' : data.stat == 3 ? 'Staying' : 'Booking'}`;
             status_label.style.fontSize = '12px';
             status_icon.className = 'fa fa-circle';
-            status_icon.style.color = data.stat == 1 ? '#28a745' : data.stat == 2 ? '#dc3545' : '#ffc107';
+            status_icon.style.color = data.stat == 2 ? '#28a745' : data.stat == 0 ? '#dc3545' : data.stat == 3 ? '#34c759' : '#ffc107';
             status_icon.style.marginLeft = '5px';
             status_icon.style.fontSize = '12px';
             status_icon.style.cursor = 'pointer';
@@ -77,10 +77,11 @@ editOpenmodelArg = (modelpanel, bookingId) => {
                         status_container.appendChild(edit_icon);
                         // Populate dropdown with options
                         edit_status_dropdown.innerHTML = `
-                            <option value="0" ${data.stat == 0 ? 'selected' : ''}>Cancelled</option>
-                            <option value="1" ${data.stat == 1 ? 'selected' : ''}>Booking</option>
-                            <option value="2" ${data.stat == 2 ? 'selected' : ''}>Confirmed</option>
-                            <option value="3" ${data.stat == 3 ? 'selected' : ''}>Staying</option>
+                            <option value="" selected>Select Status</option>
+                            <option value="0">Cancelled</option>
+                            <option value="1">Booking</option>
+                            <option value="2">Confirmed</option>
+                            <option value="3">Staying</option>
                         `;
                         edit_status_dropdown.defaultValue = data.stat; // Set default value to current status
                         // Style the dropdown
@@ -132,15 +133,16 @@ editOpenmodelArg = (modelpanel, bookingId) => {
 }
 //EDIT BOOKING MODEL LOAD ROOMS
 async function editLoadRooms(){
-    const response = await fetch('actions/php/edit_get_room.php');
-    const rooms = await response.json();
+    const room_response = await fetch('actions/php/edit_get_room.php');
+    const rooms = await room_response.json();
     const container = document.querySelector('.edit-room-grid');
     container.innerHTML = ''; // Clear existing content
     
+    const booking_id = document.getElementById('editBookingId').value;
+    const booking_response = await fetch(`actions/php/get_booking_data.php?id=${booking_id}`);
+    const booking_data = await booking_response.json();
 
-    
-
-    rooms.forEach(room => {
+    rooms.forEach(async room => {
         const label = document.createElement('label');
         label.className = 'edit-room-icon-label';
         label.style.userSelect = 'none';
@@ -160,17 +162,28 @@ async function editLoadRooms(){
         div.innerHTML = `<i class="fa fa-bed"></i><br>${room.room_number}<br><small>${room.type}</small>`;
 
         if (room.booked) {
-            if(room.booking_id === `${document.getElementById('editBookingId').value}`){
+            if(room.booking_id === document.getElementById('editBookingId').value){
+                input.checked = true;
+                input.disabled =  false;
+                div.style.backgroundColor = '#e6f0ff';
+                div.style.borderColor =  '#007bff';
+            }
+            else{
+                input.checked = true;
+                input.disabled =  true;
+                div.style.backgroundColor = '#e6f0ff';
+                div.style.borderColor =  '#ff0000';
+            }
+        }else{
+            if (booking_data?.rooms?.includes(room.room_number)) {
                 input.checked = true;
                 div.style.backgroundColor = '#e6f0ff';
                 div.style.borderColor =  '#007bff';
-            }else{
-                input.disabled =  true;
-                div.querySelector('i').style.color = '#b0c4de';
-                div.querySelector('small').style.color =  '#b0c4de';
+                console.log(booking_data?.selected_rooms);
             }
         }
-
+       
+        
 
         label.appendChild(input);
         label.appendChild(div);

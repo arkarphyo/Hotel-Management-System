@@ -62,10 +62,10 @@ if ($stat == 1 || $stat == 0 && $noof_room > 0) {
     $roomNosArray = json_decode($room_nos, true);
     if (is_array($roomNosArray)) {
         foreach ($roomNosArray as $roomNo) {
-            $updateRoomSql = "UPDATE room SET status = 1 WHERE room_number = ?";
+            $updateRoomSql = "UPDATE room SET status = 1, booking_id = ? WHERE room_number = ?";
             $roomStmt = $conn->prepare($updateRoomSql);
             if ($roomStmt) {
-                $roomStmt->bind_param("s", $roomNo);
+                $roomStmt->bind_param("ss", $booking_id, $roomNo);
                 $roomStmt->execute();
                 if ($roomStmt->error) {
                     echo json_encode(['status' => 'error', 'message' => 'Failed to update room status: ' . $roomStmt->error]);

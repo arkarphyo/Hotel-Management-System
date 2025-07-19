@@ -140,6 +140,7 @@ function setBookingBtn() {
     const Meal = document.getElementById('mealInput').checked ? 1 : 0;
     const cin = document.getElementById('cinInput').value;
     const cout = document.getElementById('coutInput').value;
+    
     // alert(`${Name}, ${National}, ${Phone}, ${RoomType}, ${RoomNos}, ${Bed}, ${NoofRoom}, ${Meal}, ${cin}, ${cout}`);
     // Check for required fields before sending request
     if (!Name || !National || !Phone || !RoomType || !RoomNos || !Bed || !NoofRoom || !Meal || !cin || !cout) {
@@ -181,7 +182,8 @@ function setBookingBtn() {
             NoofRoom: NoofRoom,
             Meal: Meal,
             cin: cin,
-            cout: cout
+            cout: cout,
+            stat: 1
         })
     })
     .then(response => {
@@ -243,23 +245,6 @@ function setBookingBtn() {
 }
 
 function editBookingBtn(){
-    // const bookingId = document.getElementById('editBookingId').value;
-    // const Name = document.getElementById('editNameInput').value;
-    // const National = document.getElementById('editNationalInput').value;
-    // const Phone = document.getElementById('editPhoneInput').value;
-    // //const roomTypeValue = document.getElementById('roomTypeSelect').value;
-    // const RoomType = "Romm Type";
-    // //const roomNosValue = document.getElementById('roomNosInput').value;
-    // const RoomNosArray = Array.from(document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked')).map(cb => cb.value);
-    // // Convert RoomNos array to JSON string
-    // const RoomNos = JSON.stringify(RoomNosArray);
-    // //const bedValue = document.getElementById('bedTypeSelect').value;
-    // const Bed = "Bed Type";
-    // const NoofRoom = document.querySelectorAll('.room-icon-label input[type="checkbox"]:checked').length;
-    // const Meal = document.getElementById('editMealInput').checked ? 1 : 0;
-    // const cin = document.getElementById('editCinInput').value;
-    // const cout = document.getElementById('editCoutInput').value;
-
     swal.fire({
         title: 'Edit Booking',
         text: "Are you sure you want to edit this booking?",
@@ -274,12 +259,6 @@ function editBookingBtn(){
             // Check for required fields before sending request
         }
     });
-            
-                
-                
-                
-
-   
    
 }
 
@@ -499,7 +478,7 @@ function editBookingSaveBtn() {
         meal: Meal,
         cin: cin,
         cout: cout,
-        stat: stat == 'Confirmed' ? 1 : stat == 'Cancelled' ? 2 : 0
+        stat: stat == 'Booking' ? 1 : stat == 'Cancelled' ? 0 : stat == 'Confirmed' ? 2 : stat == 'Staying' ? 3 : 0
         
     });
     

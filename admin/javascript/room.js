@@ -1,3 +1,8 @@
+if (typeof Swal === 'undefined') {
+    const script = document.createElement('script');
+    script.src = '../admin/widget/js/sweetalert.js';
+    document.head.appendChild(script);
+}
 function getRoomData() {
     fetch('actions/php/get_room.php')
         .then(response => response.json())
@@ -65,7 +70,7 @@ function getRoomData() {
                         // Create the staying info div
                         const stayingDiv = document.createElement('div');
                             stayingDiv.className = 'staying-info';
-                            stayingDiv.textContent = room.booking_status == 2 ? 'Staying' : room.booking_status == 1 ? 'Booking' : 'Available';
+                            stayingDiv.textContent = room.booking_status == 3 ? 'Staying' : roomBox.booking_status == 2 ? "Confirmed" : room.booking_status == 1 ? 'Booking' : 'Available';
                             stayingDiv.border = '1px solid #ccc';
                             stayingDiv.style.position = 'absolute';
                             stayingDiv.style.top = '0px';
@@ -73,7 +78,7 @@ function getRoomData() {
                             stayingDiv.style.padding = '5px 10px';
                             stayingDiv.style.borderTopLeftRadius = '12px';
                             stayingDiv.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-                            stayingDiv.style.backgroundColor = room.status == 1 ? '#34C759' : 'gray';
+                            stayingDiv.style.backgroundColor = room.booking_status == 3 ? '#34C759' : room.booking_status == 2 ? '#34C759' : room.booking_status == 1 ? '#FFC107' : 'gray';
                             stayingDiv.style.color = '#FFF';
                             stayingDiv.style.textShadow = '1px 1px 2px rgba(0, 0, 0, 0.3)';
                             stayingDiv.style.fontSize = '12px';
@@ -126,7 +131,119 @@ function getRoomData() {
                                 roomBox.style.animation = 'none';
                             });
 
-                        if(room.status == 1){
+                            // Add check-in button
+                            const checkinButton = document.createElement('button');
+                            checkinButton.className = 'btn btn-success checkin-btn';
+                            checkinButton.setAttribute('type', 'button');
+                            checkinButton.textContent = 'Check In';
+                            checkinButton.style.position = 'absolute';
+                            checkinButton.style.bottom = '40px';
+                            checkinButton.style.right = '10px';
+                            checkinButton.style.left = '8%';
+                            checkinButton.style.transform = 'translateX(-50%)';
+                            checkinButton.style.border = 'none';
+                            checkinButton.style.outline = 'none';
+                            checkinButton.style.boxShadow = 'none';
+
+                            // Ripple effect for check-in button
+                            checkinButton.addEventListener('mousedown', function(e) {
+                                const x = e.clientX - e.target.offsetLeft;
+                                const y = e.clientY - e.target.offsetTop;
+                                const ripple = document.createElement('span');
+                                ripple.className = 'ripple';
+                                ripple.style.width = e.target.offsetWidth + 'px';
+                                ripple.style.left = x + 'px';
+                                ripple.style.top = y + 'px';
+                                e.target.appendChild(ripple);
+                                setTimeout(() => ripple.remove(), 500);
+                            });
+
+                            checkinButton.onclick = () => {
+                                // Add your check-in logic here
+                                console.log(`Checking in room: ${room.room_number}`);
+                            };
+
+                            if (room.status == 0) {
+                                roomBox.appendChild(checkinButton);
+                            }
+
+
+                        if(room.booking_status == 2){
+                            roomBox.addEventListener('mouseenter', () => {
+                                checkinButton.style.transition = 'all 0.1s ease-in-out';
+                                checkinButton.style.opacity = '0';
+                                checkinButton.style.transform = 'translateY(10px)';
+                                setTimeout(() => {
+                                    checkinButton.style.opacity = '1';
+                                    checkinButton.style.transform = 'translateY(0px)';
+                                }, 50);
+                                
+                                checkinButton.onclick = () => {
+                                    Swal.fire({
+                                        title: 'Check-In ပြုလုပ်ရန် သေချာပါသလား?',
+                                        icon: 'warning',
+                                        text: 'Check-In ပြုလုပ်ရန်အတွက် "OK" နှိပ်ပါ။ မပြုလုပ်လိုပါက "Cancel" ကို နှိပ်ပါ။',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'OK',
+                                        cancelButtonText: 'Cancel'
+
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // Add your checkin logic here
+                                            fetch('../admin/actions/php/checkin_action.php', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                body: JSON.stringify({
+                                                    booking_id: room.booking_id
+                                                })
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.status === 'success') {
+                                                    Swal.fire({
+                                                        icon: 'success',
+                                                        title: 'Check-in ပြုလုပ်ခြင်း အောင်မြင်ပါသည်။',
+                                                        text: `Check-In ပြုလုပ်ပြီးပြီး ဖြစ်၍ (${room.booking_id}) ၕည့်သည် အား အခန်းအတွင်းသို့ လိုက်ပို့ပေးလို့ရပါပြီး။ `,
+                                                        confirmButtonText: 'OK',
+                                                    }).then(result => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.reload();
+                                                        }
+                                                    })
+                                                    
+                                                } else {
+                                                    console.error(`Failed to update booking status: ${data.message}`);
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error updating booking status:', error);
+                                            });
+                                        }
+                                    });
+                                };
+
+                                roomBox.appendChild(checkinButton);
+                            });
+                            roomBox.onmouseleave = function() {
+                                spanDiv.style.display = 'none';
+                                spanDiv.style.top = 0 + 'px';
+                                spanDiv.style.left = 0 + 'px';
+                                roomBox.style.transform = 'scale(1)';
+                                roomBox.style.animation = 'none';
+
+                                const checkinButton = roomBox.querySelector('.checkin-btn');
+                                if (checkinButton) {
+                                    roomBox.removeChild(checkinButton);
+                                }
+                                spanDiv.style.display = 'none';
+                                spanDiv.style.top = 0 + 'px';
+                                spanDiv.style.left = 0 + 'px';
+                            };
+
+                            
+                        }else if(room.booking_status == 3){
                             roomBox.addEventListener('mouseenter', () => {
                                 checkoutButton.style.transition = 'all 0.1s ease-in-out';
                                 checkoutButton.style.opacity = '0';
@@ -136,30 +253,23 @@ function getRoomData() {
                                     checkoutButton.style.transform = 'translateY(0px)';
                                 }, 50);
                                 
-                                checkoutButton.onclick = () => {
-                                    // Add your checkout logic here
-                                    console.log(`Checking out room: ${room.room_number}`);
-                                };
-
                                 roomBox.appendChild(checkoutButton);
                             });
-                            roomBox.onmouseleave = function() {
+                             roomBox.onmouseleave = function() {
                                 spanDiv.style.display = 'none';
                                 spanDiv.style.top = 0 + 'px';
                                 spanDiv.style.left = 0 + 'px';
                                 roomBox.style.transform = 'scale(1)';
                                 roomBox.style.animation = 'none';
 
-                                const checkoutButton = roomBox.querySelector('.checkout-btn');
-                                if (checkoutButton) {
-                                    roomBox.removeChild(checkoutButton);
+                                const checkinButton = roomBox.querySelector('.checkout-btn');
+                                if (checkinButton) {
+                                    roomBox.removeChild(checkinButton);
                                 }
                                 spanDiv.style.display = 'none';
                                 spanDiv.style.top = 0 + 'px';
                                 spanDiv.style.left = 0 + 'px';
                             };
-
-                            
                         }
                         
 

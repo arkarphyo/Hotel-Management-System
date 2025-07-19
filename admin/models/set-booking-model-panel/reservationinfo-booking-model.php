@@ -33,7 +33,7 @@
                                             echo '</label>';
                                         }
                                     }else{
-                                        $booksql = "SELECT * FROM roombook WHERE stat = 0 AND JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
+                                        $booksql = "SELECT * FROM roombook WHERE stat = 1 AND JSON_CONTAINS(RoomNos, '\"".$row['room_number']."\"')";
                                         $booked_result = mysqli_query($conn, $booksql);
                                         if (mysqli_num_rows($booked_result) > 0) {
                                             // Each room label (disabled)
@@ -47,7 +47,21 @@
                                             echo $row['room_number'].'<br><small>'.$row['roomtype_name'].'</small>';
                                             echo '</div>';
                                             echo '</label>';
-                                        }else{
+                                        }
+                                            // else if(mysqli_num_rows($booked_result) > 0 && $row['status'] == 1){
+                                            //     // Each room label (disabled)
+                                            //     $row_booked = mysqli_fetch_assoc($booked_result);
+                                            //     // Extract only numbers from RoomNos and display them
+                                            //     $roomNumbers = preg_replace('/\D+/', '', $row_booked['RoomNos']);
+                                            //     echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;opacity:0.5;pointer-events:none;border:2px solid #dc3545; border-radius:8px;box-shadow:0 4px 18px 0 rgba(220,53,69,0.18), 0 0 12px 2px rgba(220,53,69,0.22);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);">';
+                                            //     echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;" disabled>';
+                                            //     echo '<div class="room-icon" title="Room '.$row['room_number'].'">';
+                                            //     echo '<i class="fa fa-bed" style="color:#7a00e6;"></i><br>';
+                                            //     echo $row['room_number'].'<br><small>'.$row['roomtype_name'].'</small>';
+                                            //     echo '</div>';
+                                            //     echo '</label>';
+                                            // }
+                                        else{
                                             // Each room label
                                             echo '<label class="room-icon-label" onmousedown="return false;" onselectstart="return false;" style="user-select:none;">';
                                             echo '<input type="checkbox" name="selected_rooms[]" value="'.$row['room_number'].'" style="display:none;">';

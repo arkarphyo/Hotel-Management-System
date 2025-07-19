@@ -17,13 +17,13 @@ if ($id <= 0) {
     exit;
 }
 
-$stmt = $conn->prepare("SELECT cin, cout FROM roombook WHERE id = ?");
+$stmt = $conn->prepare("SELECT id, RoomNos, cin, cout FROM roombook WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
-$stmt->bind_result($result_cin, $result_cout);
+$stmt->bind_result($result_id, $result_rooms,$result_cin, $result_cout);
 
 if ($stmt->fetch()) {
-    echo json_encode(['status' => 'success', 'cin' => $result_cin, 'cout' => $result_cout]);
+    echo json_encode(['status' => 'success', 'booking_id' => $result_id, 'cin' => $result_cin, 'cout' => $result_cout, 'rooms' => $result_rooms]);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Booking not found']);
 }
