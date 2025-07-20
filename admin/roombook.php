@@ -175,7 +175,7 @@ include '../config.php';
                     }   
                     else if($res['stat'] == "1")
                     {
-                       echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].")>Confirm</button>";
+                       echo "<button class='btn btn-success' onclick=confirmBookingBtn(".$res['id'].",". $res['nodays'].")>Confirm</button>";
                     }else{
                         echo "<button class='btn btn-success' style='animation: pulse 2s infinite;'><i class='fa-solid fa-hotel' style='animation: staying 2s infinite;'></i> Staying...</button>";
                     }

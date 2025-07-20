@@ -70,7 +70,7 @@ function getRoomData() {
                         // Create the staying info div
                         const stayingDiv = document.createElement('div');
                             stayingDiv.className = 'staying-info';
-                            stayingDiv.textContent = room.booking_status == 3 ? 'Staying' : roomBox.booking_status == 2 ? "Confirmed" : room.booking_status == 1 ? 'Booking' : 'Available';
+                            stayingDiv.textContent = room.booking_status == 3 ? 'Staying' : room.booking_status == 2 ? "Confirmed" : room.booking_status == 1 ? 'Booking' : 'Available';
                             stayingDiv.border = '1px solid #ccc';
                             stayingDiv.style.position = 'absolute';
                             stayingDiv.style.top = '0px';
@@ -78,7 +78,7 @@ function getRoomData() {
                             stayingDiv.style.padding = '5px 10px';
                             stayingDiv.style.borderTopLeftRadius = '12px';
                             stayingDiv.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-                            stayingDiv.style.backgroundColor = room.booking_status == 3 ? '#34C759' : room.booking_status == 2 ? '#34C759' : room.booking_status == 1 ? '#FFC107' : 'gray';
+                            stayingDiv.style.backgroundColor = room.booking_status == 3 ? '#dc3545' : room.booking_status == 2 ? '#28a745' : room.booking_status == 1 ? '#dc3545' : 'gray';
                             stayingDiv.style.color = '#FFF';
                             stayingDiv.style.textShadow = '1px 1px 2px rgba(0, 0, 0, 0.3)';
                             stayingDiv.style.fontSize = '12px';

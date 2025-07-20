@@ -15,7 +15,7 @@ if (typeof Swal === 'undefined') {
 }
 
 // Confirm booking function
-function confirmBookingBtn(bookingId){
+function confirmBookingBtn(bookingId, nodays){
     Swal.fire({
         title: 'Confirm Booking',
         text: "Are you sure you want to confirm this booking?",
@@ -33,7 +33,8 @@ function confirmBookingBtn(bookingId){
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: bookingId
+                    id: bookingId,
+                    nodays: nodays
                 })
             })      
     

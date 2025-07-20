@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2025 at 05:54 PM
+-- Generation Time: Jul 20, 2025 at 04:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `bedtype` (
   `id` int(11) NOT NULL,
   `name` varchar(11) NOT NULL,
+  `price` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -37,11 +38,31 @@ CREATE TABLE `bedtype` (
 -- Dumping data for table `bedtype`
 --
 
-INSERT INTO `bedtype` (`id`, `name`, `created_at`) VALUES
-(1, 'Double', '2025-07-09 05:52:25'),
-(2, 'Single', '2025-07-09 05:52:25'),
-(3, 'Extra', '2025-07-09 05:53:20'),
-(4, 'Triple', '2025-07-09 05:53:20');
+INSERT INTO `bedtype` (`id`, `name`, `price`, `created_at`) VALUES
+(1, 'Double', 10000, '2025-07-20 02:32:03'),
+(2, 'Single', 10000, '2025-07-20 02:32:14'),
+(3, 'Extra', 7000, '2025-07-20 02:32:20'),
+(4, 'Triple', 15000, '2025-07-20 02:32:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_status`
+--
+
+CREATE TABLE `booking_status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `booking_status`
+--
+
+INSERT INTO `booking_status` (`id`, `name`) VALUES
+(1, 'Booking'),
+(2, 'Confirmed'),
+(3, 'Staying');
 
 -- --------------------------------------------------------
 
@@ -69,15 +90,8 @@ CREATE TABLE `checkn_info` (
 --
 
 INSERT INTO `checkn_info` (`id`, `booking_id`, `name`, `fat_name`, `age`, `gender`, `nrc_no`, `work`, `in_date`, `out_date`, `address`, `remark`) VALUES
-(1, 115, 'U Kg Kg', 'fghfgh', 54, 0, 'sdfg', 'sdfg', '2025-06-29', '2025-06-30', 'sdfg', 'sdfg'),
-(2, 115, 'fsdf', 'dfg', 43, 0, 'dfg', 'sdfg', '2025-06-29', '2025-06-30', 'sdfg', 'sdfg'),
-(3, 115, 'U Kg Kg', 'sdfsdf', 32, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdf', 'sdf'),
-(4, 115, 'U Kg Kg', 'sdf', 43, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdfsdf', 'sdfa'),
-(5, 117, 'U Kg Kg', 'asdf', 34, 0, 'sdfsdf', 'sdf', '2025-06-29', '2025-06-30', 'sdf', 'asdf'),
-(6, 115, 'asdasd', 'aSDASD', 6, 0, 'ASDASD', 'AsdaSD', '2025-06-29', '2025-06-30', 'ASDasd', 'ASDAd'),
-(7, 118, 'ASDAs', 'ASD', 23, 0, 'adaD', 'asdas', '2025-06-29', '2025-07-05', 'ADS', 'asdaSD'),
-(8, 119, 'dfgdfg', 'sdfgdfg', 45, 0, 'fdgsdfg', 'sdfgdfg', '2025-07-07', '2025-07-16', 'dfgdfg', 'sdfg'),
-(9, 119, 'sdfg', 'sdfg', 45, 0, 'sdfg', 'sdfg', '2025-07-07', '2025-07-16', 'sdfg', 'sdfgdf');
+(10, 123, 'U Kg Kg', 'U Mya', 32, 0, '12/AHSANA(N)225233', 'Trader', '2025-07-19', '2025-07-26', 'NO(32), Shw Own See ', 'Guest'),
+(11, 125, 'U Mg Mg', 'U Kaung', 43, 0, '12/43234(N_sdfsdf', 'Trader', '2025-07-20', '2025-07-23', 'NO(32)jdfiuerer', '34efsdf');
 
 -- --------------------------------------------------------
 
@@ -133,12 +147,57 @@ CREATE TABLE `payment` (
   `finaltotal` double(8,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `payment`
+-- Table structure for table `payment_info`
 --
 
-INSERT INTO `payment` (`id`, `Name`, `Email`, `RoomType`, `Bed`, `NoofRoom`, `cin`, `cout`, `noofdays`, `roomtotal`, `bedtotal`, `meal`, `mealtotal`, `finaltotal`) VALUES
-(41, 'Mg Mg', 'pankhaniyatushar9@gmail.com', 'Superior Room', 'Double', 1, '2022-11-09', '2022-11-10', 1, 3000.00, 60.00, 'Room only', 0.00, 3060.00);
+CREATE TABLE `payment_info` (
+  `id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `service_fee_id` int(11) NOT NULL,
+  `total_amount` int(11) NOT NULL DEFAULT 0,
+  `payment_type` int(11) NOT NULL,
+  `prepayment_required_amount` int(11) NOT NULL DEFAULT 0,
+  `paid_amount` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_info`
+--
+
+INSERT INTO `payment_info` (`id`, `booking_id`, `room_id`, `service_fee_id`, `total_amount`, `payment_type`, `prepayment_required_amount`, `paid_amount`) VALUES
+(1, 123, 51, 0, 50000, 1, 0, 0),
+(2, 123, 73, 0, 50000, 1, 0, 0),
+(3, 125, 54, 0, 50000, 1, 0, 0),
+(4, 125, 70, 0, 50000, 1, 0, 0),
+(5, 126, 75, 0, 220000, 1, 110000, 0),
+(7, 127, 63, 0, 220000, 1, 110000, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_type`
+--
+
+CREATE TABLE `payment_type` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `code` text NOT NULL,
+  `description` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_type`
+--
+
+INSERT INTO `payment_type` (`id`, `name`, `code`, `description`) VALUES
+(1, 'Cash', '00001', 'ငွေသားဖြင့် ပေးချခြင်း'),
+(2, 'K-Pay (KBZ-PAY)', '00002', 'K-Pay Account သို့ ငွေပေးချေခြင်း။'),
+(3, 'AYA Pay (AYA Pay Wallet)', '00003', 'AYA Pay (Wallet) ဖြင့် ပေးချခြင်း'),
+(4, 'AYA Pay (Merchant)', '00004', 'AYA PAY (Merchant) သို့ ငွေပေးချေခြင်း။');
 
 -- --------------------------------------------------------
 
@@ -152,6 +211,7 @@ CREATE TABLE `room` (
   `room_number` int(11) DEFAULT NULL,
   `type` varchar(50) NOT NULL,
   `bedding` varchar(50) NOT NULL,
+  `duration` int(11) NOT NULL DEFAULT 0,
   `capacity` int(11) NOT NULL,
   `extra_bed` int(11) NOT NULL DEFAULT 0,
   `status` int(3) NOT NULL DEFAULT 0,
@@ -162,19 +222,20 @@ CREATE TABLE `room` (
 -- Dumping data for table `room`
 --
 
-INSERT INTO `room` (`id`, `booking_id`, `room_number`, `type`, `bedding`, `capacity`, `extra_bed`, `status`, `price`) VALUES
-(51, 116, 101, '1', '1', 0, 0, 1, 0),
-(52, 116, 102, '3', '1', 0, 1, 1, 0),
-(53, 118, 103, '2', '1', 0, 0, 1, 0),
-(54, 118, 104, '4', '1', 0, 0, 1, 0),
-(63, 119, 302, '3', '1', 0, 0, 1, 0),
-(66, 0, 301, '1', '1', 2, 0, 0, 301),
-(69, 0, 401, '1', '1', 2, 0, 0, 50000),
-(70, 0, 201, '2', '1', 2, 0, 0, 50000),
-(71, 0, 202, '3', '1', 0, 0, 0, 50000),
-(72, 0, 203, '2', '1', 0, 0, 0, 50000),
-(73, 0, 204, '2', '1', 0, 0, 0, 50000),
-(74, 0, 402, '2', '1', 0, 0, 0, 50000);
+INSERT INTO `room` (`id`, `booking_id`, `room_number`, `type`, `bedding`, `duration`, `capacity`, `extra_bed`, `status`, `price`) VALUES
+(51, 123, 101, '1', '1', 0, 0, 3, 0, 50000),
+(52, 0, 102, '3', '1', 0, 0, 1, 0, 50000),
+(53, 124, 103, '2', '1', 0, 0, 0, 0, 50000),
+(54, 125, 104, '4', '1', 0, 0, 0, 0, 50000),
+(63, 127, 302, '3', '1', 2, 0, 2, 0, 50000),
+(66, 0, 301, '1', '1', 0, 2, 0, 0, 50000),
+(69, 0, 401, '1', '1', 0, 2, 0, 0, 50000),
+(70, 125, 201, '2', '1', 0, 2, 0, 0, 50000),
+(71, 0, 202, '3', '1', 0, 0, 0, 0, 50000),
+(72, 0, 203, '2', '1', 0, 0, 0, 0, 50000),
+(73, 123, 204, '2', '1', 0, 0, 0, 0, 50000),
+(74, 0, 402, '2', '1', 0, 0, 0, 0, 50000),
+(75, 126, 403, '3', '2', 0, 2, 2, 0, 50000);
 
 -- --------------------------------------------------------
 
@@ -203,49 +264,11 @@ CREATE TABLE `roombook` (
 --
 
 INSERT INTO `roombook` (`id`, `Name`, `National`, `Phone`, `RoomNos`, `RoomType`, `Bed`, `NoofRoom`, `Breakfast`, `cin`, `cout`, `nodays`, `stat`) VALUES
-(77, 'Aung Aung', 'Myanmar', '09750074567', '[\"103\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-20', '2025-06-20', 0, 2),
-(78, 'Aung Aung', 'Myanmar', '09750074567', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 0, '2025-06-20', '2025-06-24', 4, 2),
-(79, 'Aung', 'Albania', '0934737434', '[\"104\",\"201\"]', 'Romm Type', 'Bed Type', '2', 0, '2025-06-20', '2025-06-23', 3, 2),
-(80, 'Aung Aung', 'Myanmar', '09750074567', '[\"101\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-21', '2025-06-23', 2, 2),
-(81, 'Mg Mg', 'Albania', '0934737434', '[\"104\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-21', '2025-06-23', 2, 2),
-(82, 'Aung Aung', 'Myanmar', '09750074567', '[\"102\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-10', '2025-06-27', 17, 2),
-(83, 'Kyaw Kyaw', 'Myanmar', '0943234231', '[\"102\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-22', '2025-06-23', 1, 2),
-(84, 'Aung', 'Albania', '0943234231', '[\"102\"]', 'Romm Type', 'Bed Type', '1', 0, '2025-06-22', '2025-06-25', 3, 2),
-(85, 'Naing Naing', 'Afghanistan', '0943234231', '[\"102\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-22', '2025-06-24', 2, 2),
-(86, 'Aung', 'Afghanistan', '0934737434', '[\"201\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-22', '2025-06-24', 2, 2),
-(87, 'Aung Aung', 'Afghanistan', '0943234231', '[\"103\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-22', '2025-06-24', 2, 2),
-(88, 'Kyaw', 'Myanmar', '0943234231', '[\"101\",\"103\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-25', '2025-06-25', 0, 2),
-(89, 'Mg Mg', 'Myanmar', '09750074567', '[\"104\",\"202\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-24', '2025-06-28', 4, 2),
-(90, 'Arkar Phyo', 'Myanmar', '09750074567', '[\"101\",\"201\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-25', '2025-06-27', 2, 2),
-(91, 'ဦးမင်းအောင်နိုင်ဦး', 'Myanmar', '09750074567', '[\"102\",\"103\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-25', '2025-07-04', 9, 2),
-(92, 'KOAKRA', 'Myanmar', '09432342', '[\"102\",\"205\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-07-02', 4, 2),
-(93, 'KOAKRA', 'Myanmar', '09432342', '[\"102\",\"103\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-07-03', 5, 2),
-(94, 'KOAKRA', 'Myanmar', '09432342', '[\"102\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-28', '2025-07-10', 12, 2),
-(95, 'KOAKRA', 'Myanmar', '09432342', '[\"102\",\"203\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-07-17', 19, 2),
-(96, 'Aung Aung', 'Myanmar', '09750074567', '[\"102\",\"205\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(97, 'Aung Aung', 'Afghanistan', '09750074567', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(98, 'Kyaw', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(99, 'Kyaw', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(100, 'Mg Mg', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(101, 'Mg Mg', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(102, 'Kyaw', 'Afghanistan', '0934737434', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(103, 'Mg Mg', 'Myanmar', '234234234', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(104, 'Kyaw', 'Algeria', '0934737434', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(105, 'Kyaw', 'Albania', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(106, 'Naing Naing', 'Algeria', '09494885454', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(107, 'Kyaw', 'Albania', '09750074567', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(108, 'Aung Aun', 'American Samoa', '0943234231', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(109, 'Aung Aung', 'Afghanistan', '09494885454', '[\"401\",\"402\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 2),
-(110, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
-(111, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
-(112, 'KOAKRA', 'Myanmar', '09432342', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-29', 0, 2),
-(113, 'KOAKRA', 'Myanmar', '09432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
-(114, 'KOAKRA', 'Myanmar', '09432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 2),
-(115, 'KOAKRA', 'Myanmar', '09432342', '[\"202\",\"203\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-06-30', 1, 1),
-(116, 'sadfsdf', 'Myanmar', '423423423', '[\"101\",\"102\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-28', '2025-06-30', 2, 1),
-(117, '34234', 'Myanmar', '2341234', '[\"302\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-06-29', '2025-06-30', 1, 2),
-(118, 'sadfsdf', 'Myanmar', '9432342', '[\"103\",\"104\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-06-29', '2025-07-05', 6, 1),
-(119, 'WRW', 'Myanmar', '9432342', '[\"302\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-07-07', '2025-07-16', 9, 2);
+(123, 'U Arkar Phyo', 'Mya', '9750074567', '[\"101\",\"204\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-07-19', '2025-07-26', 7, 0),
+(124, 'U Zaw Zaw', 'Myanmar', '967643211', '[\"103\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-07-19', '2025-07-21', 2, 0),
+(125, 'U Mg Mg', 'Myanmar', '09750074567', '[\"104\",\"201\"]', 'Romm Type', 'Bed Type', '2', 1, '2025-07-20', '2025-07-23', 3, 0),
+(126, 'U Kyaw Kyaw', 'Myanmar', '9750074567', '[\"403\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-07-20', '2025-07-22', 2, 0),
+(127, 'U Myo Hla', 'Myanmar', '0978543221', '[\"302\"]', 'Romm Type', 'Bed Type', '1', 1, '2025-07-20', '2025-07-22', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -268,6 +291,20 @@ INSERT INTO `roomtype` (`id`, `name`, `created`) VALUES
 (2, 'Deluxe Room', '2025-07-09 05:30:47'),
 (3, 'Guest House', '2025-07-09 05:30:58'),
 (4, 'Single Room', '2025-07-09 05:30:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service_fee`
+--
+
+CREATE TABLE `service_fee` (
+  `id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  `service_type` int(11) NOT NULL,
+  `price` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -319,6 +356,12 @@ ALTER TABLE `bedtype`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `booking_status`
+--
+ALTER TABLE `booking_status`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `checkn_info`
 --
 ALTER TABLE `checkn_info`
@@ -343,6 +386,18 @@ ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `payment_info`
+--
+ALTER TABLE `payment_info`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payment_type`
+--
+ALTER TABLE `payment_type`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `room`
 --
 ALTER TABLE `room`
@@ -358,6 +413,12 @@ ALTER TABLE `roombook`
 -- Indexes for table `roomtype`
 --
 ALTER TABLE `roomtype`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `service_fee`
+--
+ALTER TABLE `service_fee`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -383,10 +444,16 @@ ALTER TABLE `bedtype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `booking_status`
+--
+ALTER TABLE `booking_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `checkn_info`
 --
 ALTER TABLE `checkn_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `emp_login`
@@ -401,22 +468,40 @@ ALTER TABLE `meal`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `payment_info`
+--
+ALTER TABLE `payment_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `payment_type`
+--
+ALTER TABLE `payment_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `roombook`
 --
 ALTER TABLE `roombook`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `roomtype`
 --
 ALTER TABLE `roomtype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `service_fee`
+--
+ALTER TABLE `service_fee`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `signup`
